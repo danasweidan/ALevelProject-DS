@@ -20,7 +20,7 @@ current_background = scaled_main
 # loading play button
 play_image = pygame.image.load('play.png').convert_alpha()
 # constructing play button
-play_button = button.Button(640, 320, play_image, 0.41)
+play_button = button.Button(640, 340, play_image, 0.41)
 
 # loading controls button
 controls_image = pygame.image.load('controls.png').convert_alpha()
@@ -36,6 +36,11 @@ custom_button = button.Button(640, 480, custom_image, 0.41)
 quit_image = pygame.image.load('quit.png').convert_alpha()
 # constructing custom button
 quit_button = button.Button(127, 600, quit_image, 0.5)
+
+# loading back button
+back_image = pygame.image.load('back.png').convert_alpha()
+# constructing back button
+back_button = button.Button(55, 26, back_image, 0.9)
 
 MAIN_MENU = "main_menu"
 PLAY = "play"
@@ -53,6 +58,7 @@ def play():
     screen.blit(current_background, (0, 0))
     pygame.display.update()
 
+
 # controls function
 def controls():
     global main, current_background,state
@@ -63,6 +69,7 @@ def controls():
     screen.blit(current_background, (0, 0))
     pygame.display.update()
 
+#custom function
 def custom():
     global main, current_background,state
     state = CUSTOM
@@ -71,6 +78,9 @@ def custom():
     current_background = custom_background  # setting the new current background
     screen.blit(current_background, (0, 0))
     pygame.display.update()
+
+
+
 
 
 # running the game loop
@@ -82,25 +92,41 @@ while run:
             sys.exit()
 
     screen.blit(current_background, (0, 0))  # scaling main menu image
+
     if state == MAIN_MENU:
+        # drawing buttons
+        if play_button.draw(screen):
+            print("play")
+            play()
 
+        if controls_button.draw(screen):
+            print("controls")
+            controls()
 
-     # drawing buttons
-     if play_button.draw(screen):
-         print("play")
-         play()
+        if custom_button.draw(screen):
+            print("custom")
+            custom()
 
-     if controls_button.draw(screen):
-          print("controls")
-          controls()
+        if quit_button.draw(screen):
+            run = False
 
-     if custom_button.draw(screen):
-          print("custom")
-          custom()
+    elif state == PLAY:
+        if back_button.draw(screen):
+            current_background = scaled_main  # resetting to main menu background
+            state = MAIN_MENU
+            pygame.display.set_caption("Main Menu")
 
-     if quit_button.draw(screen):
-        run = False
+    elif state == CONTROLS:
+        if back_button.draw(screen):
+            current_background = scaled_main  # resetting to main menu background
+            state = MAIN_MENU
+            pygame.display.set_caption("Main Menu")
 
+    elif state == CUSTOM:
+        if back_button.draw(screen):
+            current_background = scaled_main  # resetting to main menu background
+            state = MAIN_MENU
+            pygame.display.set_caption("Main Menu")
 
 
 

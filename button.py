@@ -16,7 +16,7 @@ class Button():
         self.rect = self.image.get_rect()
         self.rect.midtop = (xPos, yPos)
         self.clicked = False
-        print(f"Button created at ({xPos}, {yPos}) with size ({self.rect.width}, {self.rect.height})")
+        #print(f"Button created at ({xPos}, {yPos}) with size ({self.rect.width}, {self.rect.height})")
 
     # drawing button on screen
     def draw(self, screen):
