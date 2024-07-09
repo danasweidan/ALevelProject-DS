@@ -45,7 +45,7 @@ state = MAIN_MENU
 # play function
 def play():
     global main, current_background,state
-    state == PLAY
+    state = PLAY
     pygame.display.set_caption("Play")
     play_background = pygame.image.load('black.png').convert_alpha() # loading a black image for the background
     current_background = play_background  # setting the new current background
@@ -79,8 +79,8 @@ while run:
      if quit_button.draw(screen):
         run = False
 
-    if state == PLAY:
-        screen.fill(0,0,0)
+
+
 
 
 
