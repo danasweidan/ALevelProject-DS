@@ -7,12 +7,14 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 
 run = True
 
+# play function
+
 def play():
-    global main, current_background
+    global main, current_background,state
+    state = PLAY
     pygame.display.set_caption("Play")
-    play_background = pygame.image.load('black.png')
-    current_background = play_background
+    play_background = pygame.image.load('black.png').convert_alpha() # loading a black image for the background
+    current_background = play_background  # setting the new current background
     screen.blit(current_background, (0, 0))
     pygame.display.update()
-    screen.fill(0, 0, 0)
-    pygame.display.flip()
+
