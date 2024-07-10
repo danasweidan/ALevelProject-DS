@@ -47,6 +47,22 @@ keys_image = pygame.image.load('keys.png').convert_alpha()
 # constructing keys
 keys_button = button.Button(550, 460, keys_image, 0.5)
 
+# loading level1 button
+level1_image = pygame.image.load('level1.png').convert_alpha()
+# constructing level1 button
+level1_button = button.Button(640, 95, level1_image, 0.6)
+
+# loading level2 button
+level2_image = pygame.image.load('level2.png').convert_alpha()
+# constructing level2 button
+level2_button = button.Button(640, 185, level2_image, 0.6)
+
+# loading level3 button
+level3_image = pygame.image.load('level3.png').convert_alpha()
+# constructing level3 button
+level3_button = button.Button(640, 300, level3_image, 0.6)
+
+
 MAIN_MENU = "main_menu"
 PLAY = "play"
 CONTROLS = "controls"
@@ -116,6 +132,13 @@ while run:
             run = False
 
     elif state == PLAY:
+        if level1_button.draw(screen):
+            print("1")
+        if level2_button.draw(screen):
+            print("2")
+        if level3_button.draw(screen):
+            print("3")
+
         if back_button.draw(screen):
             current_background = scaled_main  # resetting to main menu background
             state = MAIN_MENU
