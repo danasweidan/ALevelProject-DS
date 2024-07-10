@@ -42,6 +42,11 @@ back_image = pygame.image.load('back.png').convert_alpha()
 # constructing back button
 back_button = button.Button(55, 26, back_image, 0.9)
 
+# loading keys
+keys_image = pygame.image.load('keys.png').convert_alpha()
+# constructing keys
+keys_button = button.Button(550, 460, keys_image, 0.5)
+
 MAIN_MENU = "main_menu"
 PLAY = "play"
 CONTROLS = "controls"
@@ -117,6 +122,7 @@ while run:
             pygame.display.set_caption("Main Menu")
 
     elif state == CONTROLS:
+        keys_button.draw(screen)
         if back_button.draw(screen):
             current_background = scaled_main  # resetting to main menu background
             state = MAIN_MENU
