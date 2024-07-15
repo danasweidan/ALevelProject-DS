@@ -62,6 +62,46 @@ level3_image = pygame.image.load('level3.png').convert_alpha()
 # constructing level3 button
 level3_button = button.Button(640, 300, level3_image, 0.6)
 
+# loading red button
+red_image = pygame.image.load('red.png').convert_alpha()
+# constructing red button
+red_button = button.Button(615, 375, red_image, 0.8)
+
+# loading orange button
+orange_image = pygame.image.load('orange.png').convert_alpha()
+# constructing orange button
+orange_button = button.Button(616, 375, orange_image, 0.8)
+
+# loading yellow button
+yellow_image = pygame.image.load('yellow.png').convert_alpha()
+# constructing yellow button
+yellow_button = button.Button(617, 375, yellow_image, 0.8)
+
+# loading green button
+green_image = pygame.image.load('green.png').convert_alpha()
+# constructing green button
+green_button = button.Button(618, 375, green_image, 0.8)
+
+# loading light blue button
+lightblue_image = pygame.image.load('lightblue.png').convert_alpha()
+# constructing light blue button
+lightblue_button = button.Button(615, 376, lightblue_image, 0.8)
+
+# loading dark blue button
+darkblue_image = pygame.image.load('darkblue.png').convert_alpha()
+# constructing dark blue button
+darkblue_button = button.Button(616, 376, darkblue_image, 0.8)
+
+# loading purple button
+purple_image = pygame.image.load('purple.png').convert_alpha()
+# constructing purple button
+purple_button = button.Button(617, 376, purple_image, 0.8)
+
+# loading pink button
+pink_image = pygame.image.load('pink.png').convert_alpha()
+# constructing pink button
+pink_button = button.Button(618, 376, pink_image, 0.8)
+
 
 MAIN_MENU = "main_menu"
 PLAY = "play"
@@ -73,7 +113,7 @@ state = MAIN_MENU
 def play():
     global main, current_background,state
     state = PLAY
-    pygame.display.set_caption("Play")
+    pygame.display.set_caption("Levels")
     play_background = pygame.image.load('black.png').convert_alpha() # loading a black image for the background
     current_background = play_background  # setting the new current background
     screen.blit(current_background, (0, 0))
@@ -90,7 +130,7 @@ def controls():
     screen.blit(current_background, (0, 0))
     pygame.display.update()
 
-#custom function
+# custom function
 def custom():
     global main, current_background,state
     state = CUSTOM
@@ -99,9 +139,6 @@ def custom():
     current_background = custom_background  # setting the new current background
     screen.blit(current_background, (0, 0))
     pygame.display.update()
-
-
-
 
 
 # running the game loop
@@ -152,16 +189,17 @@ while run:
             pygame.display.set_caption("Main Menu")
 
     elif state == CUSTOM:
+        red_button.draw(screen)
+        orange_button.draw(screen)
+        yellow_button.draw(screen)
+        green_button.draw(screen)
+        lightblue_button.draw(screen)
+        darkblue_button.draw(screen)
+        purple_button.draw(screen)
+        pink_button.draw(screen)
         if back_button.draw(screen):
             current_background = scaled_main  # resetting to main menu background
             state = MAIN_MENU
             pygame.display.set_caption("Main Menu")
-
-
-
-
-
-
-
 
     pygame.display.update()
