@@ -176,19 +176,20 @@ while run:
         if level3_button.draw(screen):
             print("3")
 
-        if back_button.draw(screen):
+        if back_button.draw(screen): # drawing back button
             current_background = scaled_main  # resetting to main menu background
             state = MAIN_MENU
             pygame.display.set_caption("Main Menu")
 
     elif state == CONTROLS:
-        keys_button.draw(screen)
+        keys_button.draw(screen)  # drawing back button
         if back_button.draw(screen):
             current_background = scaled_main  # resetting to main menu background
             state = MAIN_MENU
             pygame.display.set_caption("Main Menu")
 
     elif state == CUSTOM:
+        # drawing colours out
         red_button.draw(screen)
         orange_button.draw(screen)
         yellow_button.draw(screen)
@@ -197,7 +198,7 @@ while run:
         darkblue_button.draw(screen)
         purple_button.draw(screen)
         pink_button.draw(screen)
-        if back_button.draw(screen):
+        if back_button.draw(screen):  # drawing back button
             current_background = scaled_main  # resetting to main menu background
             state = MAIN_MENU
             pygame.display.set_caption("Main Menu")
