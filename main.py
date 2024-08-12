@@ -65,82 +65,82 @@ level3_button = button.Button(640, 300, level3_image, 0.6)
 # loading red button
 red_image = pygame.image.load('red.png').convert_alpha()
 # constructing red button
-red_button = button.Button(615, 375, red_image, 0.8)
+red_button = button.Button(300, 100, red_image, 0.8)
 
 # loading orange button
 orange_image = pygame.image.load('orange.png').convert_alpha()
 # constructing orange button
-orange_button = button.Button(616, 375, orange_image, 0.8)
+orange_button = button.Button(210, 250, orange_image, 0.8)
 
 # loading yellow button
 yellow_image = pygame.image.load('yellow.png').convert_alpha()
 # constructing yellow button
-yellow_button = button.Button(617, 375, yellow_image, 0.8)
+yellow_button = button.Button(120, 400, yellow_image, 0.8)
 
 # loading green button
 green_image = pygame.image.load('green.png').convert_alpha()
 # constructing green button
-green_button = button.Button(618, 375, green_image, 0.8)
+green_button = button.Button(30, 550, green_image, 0.8)
 
 # loading light blue button
 lightblue_image = pygame.image.load('lightblue.png').convert_alpha()
 # constructing light blue button
-lightblue_button = button.Button(615, 376, lightblue_image, 0.8)
+lightblue_button = button.Button(1200, 10, lightblue_image, 0.8)
 
 # loading dark blue button
 darkblue_image = pygame.image.load('darkblue.png').convert_alpha()
 # constructing dark blue button
-darkblue_button = button.Button(616, 376, darkblue_image, 0.8)
+darkblue_button = button.Button(1110, 160, darkblue_image, 0.8)
 
 # loading purple button
 purple_image = pygame.image.load('purple.png').convert_alpha()
 # constructing purple button
-purple_button = button.Button(617, 376, purple_image, 0.8)
+purple_button = button.Button(1020, 310, purple_image, 0.8)
 
 # loading pink button
 pink_image = pygame.image.load('pink.png').convert_alpha()
 # constructing pink button
-pink_button = button.Button(618, 376, pink_image, 0.8)
+pink_button = button.Button(930, 440, pink_image, 0.8)
 
 # loading red sprite button
 redSprite_image = pygame.image.load('redSprite.png').convert_alpha()
 # constructing sprite button
-redSprite_button = button.Button(640, 100, redSprite_image, 0.5)
+redSprite_button = button.Button(640, 100, redSprite_image, 0.8)
 
 # loading orange sprite button
 orangeSprite_image = pygame.image.load('orangeSprite.png').convert_alpha()
 # constructing sprite button
-orangeSprite_button = button.Button(640, 100, orangeSprite_image, 0.5)
+orangeSprite_button = button.Button(640, 100, orangeSprite_image, 0.8)
 
 # loading yellow sprite button
 yellowSprite_image = pygame.image.load('yellowSprite.png').convert_alpha()
 # constructing sprite button
-yellowSprite_button = button.Button(640, 100, yellowSprite_image, 0.5)
+yellowSprite_button = button.Button(640, 100, yellowSprite_image, 0.8)
 
 # loading green sprite button
 greenSprite_image = pygame.image.load('greenSprite.png').convert_alpha()
 # constructing sprite button
-greenSprite_button = button.Button(640, 100, greenSprite_image, 0.5)
+greenSprite_button = button.Button(640, 100, greenSprite_image, 0.8)
 
 # loading light blue sprite button
 lightblueSprite_image = pygame.image.load('lightblueSprite.png').convert_alpha()
 # constructing sprite button
-lightblueSprite_button = button.Button(640, 100, lightblueSprite_image, 0.5)
+lightblueSprite_button = button.Button(640, 100, lightblueSprite_image, 0.8)
 
 # loading dark blue sprite button
 darkblueSprite_image = pygame.image.load('darkblueSprite.png').convert_alpha()
 # constructing sprite button
-darkblueSprite_button = button.Button(640, 100, darkblueSprite_image, 0.5)
+darkblueSprite_button = button.Button(640, 100, darkblueSprite_image, 0.8)
 
 # loading purple sprite button
 purpleSprite_image = pygame.image.load('purpleSprite.png').convert_alpha()
 # constructing sprite button
-purpleSprite_button = button.Button(640, 100, purpleSprite_image, 0.5)
+purpleSprite_button = button.Button(640, 100, purpleSprite_image, 0.8)
 
 # loading pink sprite button
 pinkSprite_image = pygame.image.load('pinkSprite.png').convert_alpha()
 # constructing sprite button
-pinkSprite_button = button.Button(640, 100, pinkSprite_image, 0.5)
+pinkSprite_button = button.Button(640, 100, pinkSprite_image, 0.8)
 
 # creating the states
 MAIN_MENU = "main_menu"
@@ -242,24 +242,108 @@ while run:
         # drawing colours out
         if red_button.draw(screen):
             red_sprite_visible = True
+            orange_sprite_visible = False
+            yellow_sprite_visible = False
+            green_sprite_visible = False
+            lightblue_sprite_visible = False
+            darkblue_sprite_visible = False
+            purple_sprite_visible = False
+            pink_sprite_visible = False
 
         if red_sprite_visible:
             redSprite_button.draw(screen)
 
         if orange_button.draw(screen):
             orange_sprite_visible = True
+            red_sprite_visible = False
+            yellow_sprite_visible = False
+            green_sprite_visible = False
+            lightblue_sprite_visible = False
+            darkblue_sprite_visible = False
+            purple_sprite_visible = False
+            pink_sprite_visible = False
+
+        if orange_sprite_visible:
+            orangeSprite_button.draw(screen)
 
         if yellow_button.draw(screen):
             yellow_sprite_visible = True
+            red_sprite_visible = False
+            orange_sprite_visible = False
+            green_sprite_visible = False
+            lightblue_sprite_visible = False
+            darkblue_sprite_visible = False
+            purple_sprite_visible = False
+            pink_sprite_visible = False
+
+        if yellow_sprite_visible:
+            yellowSprite_button.draw(screen)
 
         if green_button.draw(screen):
             green_sprite_visible = True
+            red_sprite_visible = False
+            orange_sprite_visible = False
+            yellow_sprite_visible = False
+            lightblue_sprite_visible = False
+            darkblue_sprite_visible = False
+            purple_sprite_visible = False
+            pink_sprite_visible = False
 
-        lightblue_button.draw(screen)
+        if green_sprite_visible:
+            greenSprite_button.draw(screen)
 
-        darkblue_button.draw(screen)
-        purple_button.draw(screen)
-        pink_button.draw(screen)
+        if lightblue_button.draw(screen):
+            lightblue_sprite_visible = True
+            red_sprite_visible = False
+            orange_sprite_visible = False
+            yellow_sprite_visible = False
+            green_sprite_visible = False
+            darkblue_sprite_visible = False
+            purple_sprite_visible = False
+            pink_sprite_visible = False
+
+        if lightblue_sprite_visible:
+            lightblueSprite_button.draw(screen)
+
+        if darkblue_button.draw(screen):
+            darkblue_sprite_visible = True
+            red_sprite_visible = False
+            orange_sprite_visible = False
+            yellow_sprite_visible = False
+            green_sprite_visible = False
+            lightblue_sprite_visible = False
+            purple_sprite_visible = False
+            pink_sprite_visible = False
+
+        if darkblue_sprite_visible:
+            darkblueSprite_button.draw(screen)
+
+        if purple_button.draw(screen):
+            purple_sprite_visible = True
+            red_sprite_visible = False
+            orange_sprite_visible = False
+            yellow_sprite_visible = False
+            green_sprite_visible = False
+            lightblue_sprite_visible = False
+            darkblue_sprite_visible = False
+            pink_sprite_visible = False
+
+        if purple_sprite_visible:
+            purpleSprite_button.draw(screen)
+
+        if pink_button.draw(screen):
+            pink_sprite_visible = True
+            red_sprite_visible = False
+            orange_sprite_visible = False
+            yellow_sprite_visible = False
+            green_sprite_visible = False
+            lightblue_sprite_visible = False
+            darkblue_sprite_visible = False
+            purple_sprite_visible = False
+
+        if pink_sprite_visible:
+            pinkSprite_button.draw(screen)
+
         if back_button.draw(screen):  # drawing back button
             current_background = scaled_main  # resetting to main menu background
             state = MAIN_MENU
