@@ -102,12 +102,62 @@ pink_image = pygame.image.load('pink.png').convert_alpha()
 # constructing pink button
 pink_button = button.Button(618, 376, pink_image, 0.8)
 
+# loading red sprite button
+redSprite_image = pygame.image.load('redSprite.png').convert_alpha()
+# constructing sprite button
+redSprite_button = button.Button(640, 100, redSprite_image, 0.5)
 
+# loading orange sprite button
+orangeSprite_image = pygame.image.load('orangeSprite.png').convert_alpha()
+# constructing sprite button
+orangeSprite_button = button.Button(640, 100, orangeSprite_image, 0.5)
+
+# loading yellow sprite button
+yellowSprite_image = pygame.image.load('yellowSprite.png').convert_alpha()
+# constructing sprite button
+yellowSprite_button = button.Button(640, 100, yellowSprite_image, 0.5)
+
+# loading green sprite button
+greenSprite_image = pygame.image.load('greenSprite.png').convert_alpha()
+# constructing sprite button
+greenSprite_button = button.Button(640, 100, greenSprite_image, 0.5)
+
+# loading light blue sprite button
+lightblueSprite_image = pygame.image.load('lightblueSprite.png').convert_alpha()
+# constructing sprite button
+lightblueSprite_button = button.Button(640, 100, lightblueSprite_image, 0.5)
+
+# loading dark blue sprite button
+darkblueSprite_image = pygame.image.load('darkblueSprite.png').convert_alpha()
+# constructing sprite button
+darkblueSprite_button = button.Button(640, 100, darkblueSprite_image, 0.5)
+
+# loading purple sprite button
+purpleSprite_image = pygame.image.load('purpleSprite.png').convert_alpha()
+# constructing sprite button
+purpleSprite_button = button.Button(640, 100, purpleSprite_image, 0.5)
+
+# loading pink sprite button
+pinkSprite_image = pygame.image.load('pinkSprite.png').convert_alpha()
+# constructing sprite button
+pinkSprite_button = button.Button(640, 100, pinkSprite_image, 0.5)
+
+# creating the states
 MAIN_MENU = "main_menu"
 PLAY = "play"
 CONTROLS = "controls"
 CUSTOM = "custom"
 state = MAIN_MENU
+
+# setting all sprite visibility to false expect light blue
+red_sprite_visible = False
+orange_sprite_visible = False
+yellow_sprite_visible = False
+green_sprite_visible = False
+lightblue_sprite_visible = True  # default colour
+darkblue_sprite_visible = False
+purple_sprite_visible = False
+pink_sprite_visible = False
 
 # play function
 def play():
@@ -190,11 +240,23 @@ while run:
 
     elif state == CUSTOM:
         # drawing colours out
-        red_button.draw(screen)
-        orange_button.draw(screen)
-        yellow_button.draw(screen)
-        green_button.draw(screen)
+        if red_button.draw(screen):
+            red_sprite_visible = True
+
+        if red_sprite_visible:
+            redSprite_button.draw(screen)
+
+        if orange_button.draw(screen):
+            orange_sprite_visible = True
+
+        if yellow_button.draw(screen):
+            yellow_sprite_visible = True
+
+        if green_button.draw(screen):
+            green_sprite_visible = True
+
         lightblue_button.draw(screen)
+
         darkblue_button.draw(screen)
         purple_button.draw(screen)
         pink_button.draw(screen)
