@@ -50,17 +50,17 @@ keys_button = button.Button(550, 460, keys_image, 0.5)
 # loading level1 button
 level1_image = pygame.image.load('level1.png').convert_alpha()
 # constructing level1 button
-level1_button = button.Button(640, 95, level1_image, 0.6)
+level1_button = button.Button(420, 250, level1_image, 0.5)
 
 # loading level2 button
 level2_image = pygame.image.load('level2.png').convert_alpha()
 # constructing level2 button
-level2_button = button.Button(640, 185, level2_image, 0.6)
+level2_button = button.Button(850, 143, level2_image, 0.5)
 
 # loading level3 button
 level3_image = pygame.image.load('level3.png').convert_alpha()
 # constructing level3 button
-level3_button = button.Button(640, 300, level3_image, 0.6)
+level3_button = button.Button(640, 300, level3_image, 0.5)
 
 # loading red button
 red_image = pygame.image.load('red.png').convert_alpha()
@@ -147,7 +147,9 @@ MAIN_MENU = "main_menu"
 PLAY = "play"
 CONTROLS = "controls"
 CUSTOM = "custom"
+LEVEL1 = "level1"
 state = MAIN_MENU
+
 
 # setting all sprite visibility to false expect light blue
 red_sprite_visible = False
@@ -191,6 +193,17 @@ def custom():
     pygame.display.update()
 
 
+# level 1 function
+def level1():
+    global main, current_background, state
+    state = LEVEL1
+    pygame.display.set_caption("Level 1")
+    custom_background = pygame.image.load('black.png').convert_alpha()  # loading a black image for the background
+    current_background = custom_background  # setting the new current background
+    screen.blit(current_background, (0, 0))
+    pygame.display.update()
+
+
 # running the game loop
 run = True
 while run:
@@ -221,12 +234,15 @@ while run:
     elif state == PLAY:
         if level1_button.draw(screen):
             print("1")
+            level1()
+
         if level2_button.draw(screen):
             print("2")
+
         if level3_button.draw(screen):
             print("3")
 
-        if back_button.draw(screen): # drawing back button
+        if back_button.draw(screen):  # drawing back button
             current_background = scaled_main  # resetting to main menu background
             state = MAIN_MENU
             pygame.display.set_caption("Main Menu")
