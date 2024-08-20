@@ -147,10 +147,10 @@ pause_image = pygame.image.load('pause.png').convert_alpha()
 # constructing pause button
 pause_button = button.Button(1200, 30, pause_image, 0.6)
 
-# loading pause background
-pausemenu_image = pygame.image.load('pausemenu.png').convert_alpha()
-# constructing pause button
-pausemenu_button = button.Button(1200, 30, pause_image, 0.6)
+# loading exit button
+exit_image = pygame.image.load('exit.png').convert_alpha()
+# constructing exit button
+exit_button = button.Button(800, 500, exit_image, 0.5)
 
 
 # creating the states
@@ -215,6 +215,7 @@ def level1():
     screen.blit(current_background, (0, 0))
     pygame.display.update()
 
+# pause function
 def pause():
     global main, current_background, state, scaled_main
     state = PAUSE
@@ -390,5 +391,13 @@ while run:
     elif state == LEVEL1:
         if pause_button.draw(screen):
             pause()
+
+    elif state == PAUSE:
+        if exit_button.draw(screen):
+            main = pygame.image.load('mainmenu.png')  # loading the main menu background
+            scaled_main = pygame.transform.scale(main, (1280, 720))  # scaling down the image to fit the screen
+            current_background = scaled_main
+            state = MAIN_MENU
+            pygame.display.set_caption("Main Menu")
 
     pygame.display.update()
