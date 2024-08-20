@@ -142,12 +142,18 @@ pinkSprite_image = pygame.image.load('pinkSprite.png').convert_alpha()
 # constructing sprite button
 pinkSprite_button = button.Button(640, 100, pinkSprite_image, 0.8)
 
+# loading pause button
+pause_image = pygame.image.load('pause.png').convert_alpha()
+# constructing pause button
+pause_button = button.Button(1200, 30, pause_image, 0.6)
+
 # creating the states
 MAIN_MENU = "main_menu"
 PLAY = "play"
 CONTROLS = "controls"
 CUSTOM = "custom"
 LEVEL1 = "level1"
+PAUSE = "pause"
 state = MAIN_MENU
 
 
@@ -364,5 +370,8 @@ while run:
             current_background = scaled_main  # resetting to main menu background
             state = MAIN_MENU
             pygame.display.set_caption("Main Menu")
+
+    elif state == LEVEL1:
+        pause_button.draw(screen)
 
     pygame.display.update()
