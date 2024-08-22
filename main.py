@@ -3,7 +3,6 @@ import pygame
 import sys
 import button
 
-
 pygame.init()
 
 # creating the display window
@@ -223,8 +222,18 @@ def pause():
     main = pygame.image.load('pausemenu.png')  # loading the main menu background
     scaled_main = pygame.transform.scale(main, (1280, 720))  # scaling down the image to fit the screen
     current_background = scaled_main
-    screen.blit(current_background, (0, 0))
-    pygame.display.update()
+
+
+GREEN = (0, 255, 0)
+
+TILESIZE = 32  # initialising tile size
+grid_width = screen_width / TILESIZE
+grid_height = screen_height / TILESIZE
+def draw_grid():
+    for x in range(0, screen_width, TILESIZE):
+        pygame.draw.line(screen, GREEN, (x, 0), (x, screen_height))
+    for y in range(0, screen_height, TILESIZE):
+        pygame.draw.line(screen, GREEN, (0, y), (screen_width, y))
 
 
 # running the game loop
@@ -389,6 +398,7 @@ while run:
             pygame.display.set_caption("Main Menu")
 
     elif state == LEVEL1:
+        draw_grid()
         if pause_button.draw(screen):
             pause()
 
