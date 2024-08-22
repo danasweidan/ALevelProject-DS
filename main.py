@@ -234,6 +234,10 @@ GREEN = (0, 255, 0)  # temporary
 TILESIZE = 64  # initialising tile size
 grid_width = screen_width / TILESIZE
 grid_height = screen_height / TILESIZE
+
+sprite_x, sprite_y = 2 * TILESIZE, 9 * TILESIZE
+
+
 # function for drawing out the grid lines
 def draw_grid():
     for x in range(0, screen_width, TILESIZE):
@@ -241,7 +245,7 @@ def draw_grid():
     for y in range(0, screen_height, TILESIZE):
         pygame.draw.line(screen, GREEN, (0, y), (screen_width, y))
 
-def display_sprite(sprite_x, sprite_y):
+def display_sprite(tile_x, tile_y):
     global selected_sprite, TILESIZE
     # loading sprite on grid
     if selected_sprite == redSprite_image:
@@ -261,11 +265,9 @@ def display_sprite(sprite_x, sprite_y):
     elif selected_sprite == pinkSprite_image:
         sprite_image = pygame.image.load('pinkSprite.png').convert_alpha()
     sprite_image = pygame.transform.scale(sprite_image, (TILESIZE, TILESIZE))  # scale it to fit a grid box
-    sprite_x = sprite_x * TILESIZE
-    sprite_y = sprite_y * TILESIZE
-    screen_pos = sprite_x, sprite_y
+    screen_pos = tile_x * TILESIZE, tile_y * TILESIZE
     screen.blit(sprite_image, screen_pos)
-    return
+    return sprite_image
 
 
 # running the game loop
@@ -275,6 +277,16 @@ while run:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+        # Handling movement
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]:
+        sprite_x -= 1
+    if keys[pygame.K_RIGHT]:
+        sprite_x += 1
+    if keys[pygame.K_UP]:
+        sprite_y -= 1
+    if keys[pygame.K_DOWN]:
+        sprite_y += 1
 
     screen.blit(current_background, (0, 0))  # scaling main menu image
 
@@ -440,7 +452,7 @@ while run:
     elif state == LEVEL1:
         draw_grid()
         # loading sprite on grid
-        display_sprite(5, 3)
+        display_sprite(sprite_x // TILESIZE, sprite_y // TILESIZE)
         if pause_button.draw(screen):
             pause()
 
