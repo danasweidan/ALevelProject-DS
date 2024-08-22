@@ -2,6 +2,7 @@
 import pygame
 import sys
 import button
+import sprite
 
 pygame.init()
 
@@ -172,6 +173,8 @@ darkblue_sprite_visible = False
 purple_sprite_visible = False
 pink_sprite_visible = False
 
+selected_sprite = lightblueSprite_image
+
 # play function
 def play():
     global main, current_background,state
@@ -223,17 +226,46 @@ def pause():
     scaled_main = pygame.transform.scale(main, (1280, 720))  # scaling down the image to fit the screen
     current_background = scaled_main
 
+# SPRITES AND SPRITE MOVEMENT
 
-GREEN = (0, 255, 0)
 
-TILESIZE = 32  # initialising tile size
+GREEN = (0, 255, 0)  # temporary
+
+TILESIZE = 64  # initialising tile size
 grid_width = screen_width / TILESIZE
 grid_height = screen_height / TILESIZE
+# function for drawing out the grid lines
 def draw_grid():
     for x in range(0, screen_width, TILESIZE):
         pygame.draw.line(screen, GREEN, (x, 0), (x, screen_height))
     for y in range(0, screen_height, TILESIZE):
         pygame.draw.line(screen, GREEN, (0, y), (screen_width, y))
+
+def display_sprite(sprite_x, sprite_y):
+    global selected_sprite, TILESIZE
+    # loading sprite on grid
+    if selected_sprite == redSprite_image:
+        sprite_image = pygame.image.load('redSprite.png').convert_alpha()
+    elif selected_sprite == orangeSprite_image:
+        sprite_image = pygame.image.load('orangeSprite.png').convert_alpha()
+    elif selected_sprite == yellowSprite_image:
+        sprite_image = pygame.image.load('yellowSprite.png').convert_alpha()
+    elif selected_sprite == greenSprite_image:
+        sprite_image = pygame.image.load('greenSprite.png').convert_alpha()
+    elif selected_sprite == lightblueSprite_image:
+        sprite_image = pygame.image.load('lightblueSprite.png').convert_alpha()
+    elif selected_sprite == darkblueSprite_image:
+        sprite_image = pygame.image.load('darkblueSprite.png').convert_alpha()
+    elif selected_sprite == purpleSprite_image:
+        sprite_image = pygame.image.load('purpleSprite.png').convert_alpha()
+    elif selected_sprite == pinkSprite_image:
+        sprite_image = pygame.image.load('pinkSprite.png').convert_alpha()
+    sprite_image = pygame.transform.scale(sprite_image, (TILESIZE, TILESIZE))  # scale it to fit a grid box
+    sprite_x = sprite_x * TILESIZE
+    sprite_y = sprite_y * TILESIZE
+    screen_pos = sprite_x, sprite_y
+    screen.blit(sprite_image, screen_pos)
+    return
 
 
 # running the game loop
@@ -297,6 +329,7 @@ while run:
             darkblue_sprite_visible = False
             purple_sprite_visible = False
             pink_sprite_visible = False
+            selected_sprite = redSprite_image  # updating selected sprite
 
         if red_sprite_visible:
             redSprite_button.draw(screen)
@@ -310,6 +343,7 @@ while run:
             darkblue_sprite_visible = False
             purple_sprite_visible = False
             pink_sprite_visible = False
+            selected_sprite = orangeSprite_image  # updating selected sprite
 
         if orange_sprite_visible:
             orangeSprite_button.draw(screen)
@@ -323,6 +357,7 @@ while run:
             darkblue_sprite_visible = False
             purple_sprite_visible = False
             pink_sprite_visible = False
+            selected_sprite = yellowSprite_image # updating selected sprite
 
         if yellow_sprite_visible:
             yellowSprite_button.draw(screen)
@@ -336,6 +371,7 @@ while run:
             darkblue_sprite_visible = False
             purple_sprite_visible = False
             pink_sprite_visible = False
+            selected_sprite = greenSprite_image  # updating selected sprite
 
         if green_sprite_visible:
             greenSprite_button.draw(screen)
@@ -349,6 +385,7 @@ while run:
             darkblue_sprite_visible = False
             purple_sprite_visible = False
             pink_sprite_visible = False
+            selected_sprite = lightblueSprite_image  # updating selected sprite
 
         if lightblue_sprite_visible:
             lightblueSprite_button.draw(screen)
@@ -362,6 +399,7 @@ while run:
             lightblue_sprite_visible = False
             purple_sprite_visible = False
             pink_sprite_visible = False
+            selected_sprite = darkblueSprite_image # updating selected sprite
 
         if darkblue_sprite_visible:
             darkblueSprite_button.draw(screen)
@@ -375,6 +413,7 @@ while run:
             lightblue_sprite_visible = False
             darkblue_sprite_visible = False
             pink_sprite_visible = False
+            selected_sprite = purpleSprite_image  # updating selected sprite
 
         if purple_sprite_visible:
             purpleSprite_button.draw(screen)
@@ -388,6 +427,7 @@ while run:
             lightblue_sprite_visible = False
             darkblue_sprite_visible = False
             purple_sprite_visible = False
+            selected_sprite = pinkSprite_image  # updating selected sprite
 
         if pink_sprite_visible:
             pinkSprite_button.draw(screen)
@@ -399,6 +439,8 @@ while run:
 
     elif state == LEVEL1:
         draw_grid()
+        # loading sprite on grid
+        display_sprite(5, 3)
         if pause_button.draw(screen):
             pause()
 
