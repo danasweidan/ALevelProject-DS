@@ -17,6 +17,11 @@ main = pygame.image.load('mainmenu.png')  # loading the main menu background
 scaled_main = pygame.transform.scale(main, (1280, 720))  # scaling down the image to fit the screen
 current_background = scaled_main
 
+# loading title of game
+title_image = pygame.image.load('pixelpaths.png').convert_alpha()
+# constructing title
+title_button = button.Button(640, 85, title_image, 0.4)
+
 # loading play button
 play_image = pygame.image.load('play.png').convert_alpha()
 # constructing play button
@@ -229,7 +234,7 @@ def pause():
 # SPRITES AND SPRITE MOVEMENT
 
 
-GREEN = (0, 255, 0)  # temporary
+GREEN = (128, 255, 0)  # temporary
 
 TILESIZE = 60  # initialising tile size
 grid_width = screen_width / TILESIZE
@@ -286,7 +291,7 @@ def display_sprite(tile_x, tile_y):
 # function for drawing walls on the map
 def draw_walls():
     global TILESIZE, level1_walls
-    wall_colour = (127, 0, 255)  # purple walls
+    wall_colour = (128, 0, 178)  # purple walls
     for pos in level1_walls:
         wall_x = pos[0] * TILESIZE
         wall_y = pos[1] * TILESIZE
@@ -314,6 +319,9 @@ while run:
     screen.blit(current_background, (0, 0))  # scaling main menu image
 
     if state == MAIN_MENU:
+
+        title_button.draw(screen)
+
         # drawing buttons
         if play_button.draw(screen):
             print("play")
