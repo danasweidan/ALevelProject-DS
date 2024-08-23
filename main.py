@@ -214,12 +214,13 @@ def custom():
 
 # level 1 function
 def level1():
-    global main, current_background, state
+    global main, current_background, state, sprite_x, sprite_y, initial_sprite_x, initial_sprite_y
     state = LEVEL1
     pygame.display.set_caption("Level 1")
     custom_background = pygame.image.load('black.png').convert_alpha()  # loading a black image for the background
     current_background = custom_background  # setting the new current background
     screen.blit(current_background, (0, 0))
+    sprite_x, sprite_y = initial_sprite_x, initial_sprite_y  # Reset the sprite's position
     pygame.display.update()
 
 # pause function
@@ -254,8 +255,11 @@ level1_walls = [(0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), 
                 (16, 7), (17, 7), (18, 7), (13, 7), (13, 8), (13, 9), (16, 8), (16, 9)
                 ]
 
+
+# initialising the starting position
+initial_sprite_x, initial_sprite_y = 1 * TILESIZE, 10 * TILESIZE
 # sprite starting coordinates
-sprite_x, sprite_y = 1 * TILESIZE, 10 * TILESIZE
+sprite_x, sprite_y = initial_sprite_x, initial_sprite_y
 
 
 # function for drawing out the grid lines
@@ -496,6 +500,7 @@ while run:
             scaled_main = pygame.transform.scale(main, (1280, 720))  # scaling down the image to fit the screen
             current_background = scaled_main
             state = MAIN_MENU
+            sprite_x, sprite_y = initial_sprite_x, initial_sprite_y  # Reset sprite position
             pygame.display.set_caption("Main Menu")
 
     pygame.display.update()
