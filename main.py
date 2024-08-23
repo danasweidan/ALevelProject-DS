@@ -231,11 +231,24 @@ def pause():
 
 GREEN = (0, 255, 0)  # temporary
 
-TILESIZE = 64  # initialising tile size
+TILESIZE = 60  # initialising tile size
 grid_width = screen_width / TILESIZE
 grid_height = screen_height / TILESIZE
+# wall positions, array for coordinates
+level1_walls = [(0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), (0, 10), (0, 11),
+                (1, 11), (2, 11), (3, 11), (4, 11), (5, 11), (6, 11), (7, 11), (8, 11), (9, 11), (10, 11),
+                (11, 11), (12, 11), (13, 11), (14, 11), (15, 11), (16, 11), (17, 11), (18, 11), (19, 11),
+                (20, 11), (21, 11),
+                (21, 2), (21, 3), (21, 4), (21, 5), (21, 6), (21, 7), (21, 8), (21, 9), (21, 10), (21, 11),
+                (0, 9), (1, 9), (2, 9), (3, 9), (4, 9), (5, 9), (6, 9), (8, 9), (8, 8), (8, 10), (8, 7), (7, 7),
+                (9, 7), (10, 7), (11, 7), (6, 7), (5, 7), (4, 7),
+                (1, 2), (2, 2), (3, 2), (4, 2), (5, 2), (6, 2), (7, 2), (8, 2), (9, 2), (10, 2),
+                (11, 2), (12, 2), (13, 2), (14, 2), (15, 2), (16, 2), (18, 2), (19, 2), (20, 2)
 
-sprite_x, sprite_y = 2 * TILESIZE, 9 * TILESIZE
+            ]
+
+# sprite starting coordinates
+sprite_x, sprite_y = 1 * TILESIZE, 10 * TILESIZE
 
 
 # function for drawing out the grid lines
@@ -245,8 +258,9 @@ def draw_grid():
     for y in range(0, screen_height, TILESIZE):
         pygame.draw.line(screen, GREEN, (0, y), (screen_width, y))
 
+# displaying sprite
 def display_sprite(tile_x, tile_y):
-    global selected_sprite, TILESIZE
+    global selected_sprite, TILESIZE, sprite_image
     # loading sprite on grid
     if selected_sprite == redSprite_image:
         sprite_image = pygame.image.load('redSprite.png').convert_alpha()
@@ -268,6 +282,15 @@ def display_sprite(tile_x, tile_y):
     screen_pos = tile_x * TILESIZE, tile_y * TILESIZE
     screen.blit(sprite_image, screen_pos)
     return sprite_image
+
+# function for drawing walls on the map
+def draw_walls():
+    global TILESIZE, level1_walls
+    wall_colour = (127, 0, 255)  # purple walls
+    for pos in level1_walls:
+        wall_x = pos[0] * TILESIZE
+        wall_y = pos[1] * TILESIZE
+        pygame.draw.rect(screen, wall_colour, (wall_x, wall_y, TILESIZE, TILESIZE))
 
 
 # running the game loop
@@ -453,6 +476,7 @@ while run:
         draw_grid()
         # loading sprite on grid
         display_sprite(sprite_x // TILESIZE, sprite_y // TILESIZE)
+        draw_walls()
         if pause_button.draw(screen):
             pause()
 
