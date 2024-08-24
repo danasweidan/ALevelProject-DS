@@ -260,6 +260,7 @@ level1_walls = [(0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), 
 initial_sprite_x, initial_sprite_y = 1 * TILESIZE, 10 * TILESIZE
 # sprite starting coordinates
 sprite_x, sprite_y = initial_sprite_x, initial_sprite_y
+score = 0  # starting score
 
 
 # function for drawing out the grid lines
@@ -302,6 +303,12 @@ def draw_walls():
         wall_x = pos[0] * TILESIZE
         wall_y = pos[1] * TILESIZE
         pygame.draw.rect(screen, wall_colour, (wall_x, wall_y, TILESIZE, TILESIZE))
+
+# scoring
+def draw_score(score):
+    font = pygame.font.SysFont('Emulogic', 50, bold=True)
+    score_text = font.render(f"S C O R E : {score}", True, (255, 255, 255))  # Render the score in white color
+    screen.blit(score_text, (10, 75))  # output score top-left corner
 
 
 # running the game loop
@@ -491,6 +498,7 @@ while run:
         # loading sprite on grid
         display_sprite(sprite_x // TILESIZE, sprite_y // TILESIZE)
         draw_walls()
+        draw_score(score)
         if pause_button.draw(screen):
             pause()
 
