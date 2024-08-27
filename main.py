@@ -317,8 +317,7 @@ coin_image = pygame.transform.scale(coin_image, (32, 32))  # scale to fit the gr
 # coin placement
 level1_coins = [(7, 10), (7, 9), (7, 8), (1, 3), (1, 4), (2, 3), (2, 4), (5, 3), (5, 4), (5, 5), (5, 6), (6, 3), (7, 3),
                 (7, 4), (7, 5), (7, 6), (10, 4), (11, 4), (12, 4), (13, 4), (9, 10), (9, 9), (9, 8),
-                (17, 3), (17, 4), (17, 5), (19, 3), (19, 4), (19, 5), (20, 3), (20, 4), (20, 5)
-         ]
+                (17, 3), (17, 4), (17, 5), (19, 3), (19, 4), (19, 5), (20, 3), (20, 4), (20, 5)]
 
 # function for placing the coins
 def draw_coins():
@@ -333,6 +332,11 @@ def coin_collision(sprite_x, sprite_y):
     if sprite_pos in level1_coins:
         level1_coins.remove(sprite_pos)
         score += 50  # Adjust score increment as needed
+
+
+# trophy
+trophy_image = pygame.image.load('trophy.png').convert_alpha()  # loading coin image
+trophy_image = pygame.transform.scale(trophy_image, (58, 58))  # scale to fit the grid
 
 
 # running the game loop
@@ -535,6 +539,7 @@ while run:
         draw_score(score)
         draw_coins()
         coin_collision(sprite_x, sprite_y)
+        screen.blit(trophy_image, (17 * TILESIZE , 2 * TILESIZE))
         if pause_button.draw(screen):
             pause()
 
