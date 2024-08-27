@@ -155,7 +155,32 @@ pause_button = button.Button(1200, 30, pause_image, 0.6)
 # loading exit button
 exit_image = pygame.image.load('exit.png').convert_alpha()
 # constructing exit button
-exit_button = button.Button(800, 500, exit_image, 0.5)
+exit_button = button.Button(900, 500, exit_image, 0.5)
+
+# loading complete button
+complete_image = pygame.image.load('complete.png').convert_alpha()
+# constructing complete button
+complete_button = button.Button(640, 100, complete_image, 0.8)
+
+# loading resume button
+resume_image = pygame.image.load('resume.png').convert_alpha()
+# constructing resume button
+resume_button = button.Button(640, 500, resume_image, 0.7)
+
+# loading retry button
+retry_image = pygame.image.load('retry.png').convert_alpha()
+# constructing retry button
+retry_button = button.Button(380, 500, resume_image, 0.7)
+
+# loading star button
+star1_image = pygame.image.load('star.png').convert_alpha()
+# constructing star button
+star1_button = button.Button(800, 270, star1_image, 0.7)
+
+# loading star button
+star2_image = pygame.image.load('star.png').convert_alpha()
+# constructing star button
+star2_button = button.Button(470, 270, star2_image, 0.7)
 
 
 # creating the states
@@ -165,6 +190,8 @@ CONTROLS = "controls"
 CUSTOM = "custom"
 LEVEL1 = "level1"
 PAUSE = "pause"
+GAME_OVER = "game_over"
+COMPLETE = "complete"
 state = MAIN_MENU
 
 
@@ -232,10 +259,21 @@ def pause():
     scaled_main = pygame.transform.scale(main, (1280, 720))  # scaling down the image to fit the screen
     current_background = scaled_main
 
+def complete():
+    global main, current_background, state
+    state = COMPLETE
+    pygame.display.set_caption("Level Complete")
+    custom_background = pygame.image.load('black.png').convert_alpha()  # loading a black image for the background
+    current_background = custom_background  # setting the new current background
+    screen.blit(current_background, (0, 0))
+    pygame.display.update()
+
+
 # SPRITES AND SPRITE MOVEMENT
 
 
-GREEN = (128, 255, 0)  # temporary
+GREEN = (128, 255, 0) # temporary
+BLACK = (0, 0, 0)
 
 TILESIZE = 60  # initialising tile size
 grid_width = screen_width / TILESIZE
@@ -313,17 +351,19 @@ def draw_score(score):
 
 # coins
 coin_image = pygame.image.load('coin.png').convert_alpha()  # loading coin image
-coin_image = pygame.transform.scale(coin_image, (32, 32))  # scale to fit the grid
+coin_image = pygame.transform.scale(coin_image, (35, 35))  # scale to fit the grid
 # coin placement
 level1_coins = [(7, 10), (7, 9), (7, 8), (1, 3), (1, 4), (2, 3), (2, 4), (5, 3), (5, 4), (5, 5), (5, 6), (6, 3), (7, 3),
                 (7, 4), (7, 5), (7, 6), (10, 4), (11, 4), (12, 4), (13, 4), (9, 10), (9, 9), (9, 8),
-                (17, 3), (17, 4), (17, 5), (19, 3), (19, 4), (19, 5), (20, 3), (20, 4), (20, 5)]
+                (17, 3), (17, 4), (17, 5), (19, 3), (19, 4), (19, 5), (20, 3), (20, 4), (20, 5), (15, 10), (16, 10),
+                (17, 10), (18, 10), (1, 6), (1, 7), (1, 8),(15, 10), (15, 10), (10, 3), (11, 3), (12, 3), (13, 3)
+                ]
 
 # function for placing the coins
 def draw_coins():
     for coin_pos in level1_coins:
-        coin_x = coin_pos[0] * TILESIZE + 18
-        coin_y = coin_pos[1] * TILESIZE + 18
+        coin_x = coin_pos[0] * TILESIZE + 15
+        coin_y = coin_pos[1] * TILESIZE + 15
         screen.blit(coin_image, (coin_x, coin_y))
 # coin collisions
 def coin_collision(sprite_x, sprite_y):
@@ -331,12 +371,27 @@ def coin_collision(sprite_x, sprite_y):
     sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
     if sprite_pos in level1_coins:
         level1_coins.remove(sprite_pos)
-        score += 50  # Adjust score increment as needed
+        score += 50  # +50 points to the score
 
 
 # trophy
 trophy_image = pygame.image.load('trophy.png').convert_alpha()  # loading coin image
 trophy_image = pygame.transform.scale(trophy_image, (58, 58))  # scale to fit the grid
+trophy_position = (17, 2)
+
+# function to draw the trophy on the screen
+def draw_trophy():
+    trophy_x = trophy_position[0] * TILESIZE
+    trophy_y = trophy_position[1] * TILESIZE
+    screen.blit(trophy_image, (trophy_x, trophy_y))
+
+# function to check for collision with the trophy
+def trophy_collision(sprite_x, sprite_y):
+    global state
+    sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
+    if sprite_pos == trophy_position:
+        return True
+    return False
 
 
 # running the game loop
@@ -539,7 +594,9 @@ while run:
         draw_score(score)
         draw_coins()
         coin_collision(sprite_x, sprite_y)
-        screen.blit(trophy_image, (17 * TILESIZE , 2 * TILESIZE))
+        draw_trophy()
+        if trophy_collision(sprite_x, sprite_y):
+            complete()
         if pause_button.draw(screen):
             pause()
 
@@ -551,5 +608,23 @@ while run:
             state = MAIN_MENU
             sprite_x, sprite_y = initial_sprite_x, initial_sprite_y  # Reset sprite position
             pygame.display.set_caption("Main Menu")
+
+    elif state == COMPLETE:
+        font = pygame.font.SysFont('Emulogic', 50, bold=True)
+        score_text = font.render(f"S C O R E : {score}", True, (255, 255, 255))  # Render the score in white color
+        screen.blit(score_text, (500, 300))  # output score top-left corner
+        star1_button.draw(screen)
+        star2_button.draw(screen)
+        complete_button.draw(screen)
+        resume_button.draw(screen)
+        retry_button.draw(screen)
+        if exit_button.draw(screen):
+            main = pygame.image.load('mainmenu.png')  # loading the main menu background
+            scaled_main = pygame.transform.scale(main, (1280, 720))  # scaling down the image to fit the screen
+            current_background = scaled_main
+            state = MAIN_MENU
+            sprite_x, sprite_y = initial_sprite_x, initial_sprite_y  # Reset sprite position
+            pygame.display.set_caption("Main Menu")
+
 
     pygame.display.update()
