@@ -314,20 +314,30 @@ def draw_score(score):
 # running the game loop
 run = True
 while run:
+    key_handled = False
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-        # Handling movement
+
+    # Handling movement
     keys = pygame.key.get_pressed()
+    # Handling movement with collision detection
+    new_x, new_y = sprite_x, sprite_y
+
     if keys[pygame.K_LEFT]:
-        sprite_x -= 1
+        new_x -= 1
     if keys[pygame.K_RIGHT]:
-        sprite_x += 1
+        new_x += 1
     if keys[pygame.K_UP]:
-        sprite_y -= 1
+        new_y -= 1
     if keys[pygame.K_DOWN]:
-        sprite_y += 1
+        new_y += 1
+
+    # Check for collision with walls
+    if (new_x // TILESIZE, new_y // TILESIZE) not in level1_walls:
+        sprite_x, sprite_y = new_x, new_y
 
     screen.blit(current_background, (0, 0))  # scaling main menu image
 
