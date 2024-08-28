@@ -438,19 +438,34 @@ def coin_collision2(sprite_x, sprite_y):
 # trophy
 trophy_image = pygame.image.load('trophy.png').convert_alpha()  # loading coin image
 trophy_image = pygame.transform.scale(trophy_image, (58, 58))  # scale to fit the grid
-trophy_position = (17, 2)
+trophy_position1 = (17, 2)
+trophy_position2 = (12, 2)
 
+# level1
 # function to draw the trophy on the screen
-def draw_trophy():
-    trophy_x = trophy_position[0] * TILESIZE
-    trophy_y = trophy_position[1] * TILESIZE
+def draw_trophy1():
+    trophy_x = trophy_position1[0] * TILESIZE
+    trophy_y = trophy_position1[1] * TILESIZE
     screen.blit(trophy_image, (trophy_x, trophy_y))
 
 # function to check for collision with the trophy
-def trophy_collision(sprite_x, sprite_y):
+def trophy_collision1(sprite_x, sprite_y):
     global state
     sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
-    if sprite_pos == trophy_position:
+    if sprite_pos == trophy_position1:
+        return True
+    return False
+
+# level2
+def draw_trophy2():
+    trophy_x = trophy_position2[0] * TILESIZE
+    trophy_y = trophy_position2[1] * TILESIZE
+    screen.blit(trophy_image, (trophy_x, trophy_y))
+
+def trophy_collision2(sprite_x, sprite_y):
+    global state
+    sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
+    if sprite_pos == trophy_position2:
         return True
     return False
 
@@ -496,15 +511,12 @@ while run:
 
         # drawing buttons
         if play_button.draw(screen):
-            print("play")
             play()
 
         if controls_button.draw(screen):
-            print("controls")
             controls()
 
         if custom_button.draw(screen):
-            print("custom")
             custom()
 
         if quit_button.draw(screen):
@@ -518,11 +530,9 @@ while run:
         screen.blit(score2_text, (680, 350))  # output score under level2
 
         if level1_button.draw(screen):
-            print("1")
             level1()
 
         if level2_button.draw(screen):
-            print("2")
             level2()
 
         if level3_button.draw(screen):
@@ -667,8 +677,8 @@ while run:
         draw_score1(score1)
         draw_coins_1()
         coin_collision1(sprite_x, sprite_y)
-        draw_trophy()
-        if trophy_collision(sprite_x, sprite_y):
+        draw_trophy1()
+        if trophy_collision1(sprite_x, sprite_y):
             complete()
         if pause_button.draw(screen):
             pause()
@@ -682,9 +692,9 @@ while run:
         draw_walls_2()
         draw_coins_2()
         coin_collision2(sprite_x, sprite_y)
-        #draw_trophy()
-        #if trophy_collision(sprite_x, sprite_y):
-           # complete()
+        draw_trophy2()
+        if trophy_collision2(sprite_x, sprite_y):
+            complete()
         if pause_button.draw(screen):
             pause()
 
