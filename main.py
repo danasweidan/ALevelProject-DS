@@ -318,7 +318,8 @@ level2_walls =[(0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), (
 initial_sprite_x, initial_sprite_y = 1 * TILESIZE, 10 * TILESIZE
 # sprite starting coordinates
 sprite_x, sprite_y = initial_sprite_x, initial_sprite_y
-score = 0  # starting score
+score1 = 0  # starting score for level 1
+score2 = 0  # starting score for level 2
 
 
 # function for drawing out the grid lines
@@ -372,10 +373,15 @@ def draw_walls_2():
         pygame.draw.rect(screen, wall_colour, (wall_x, wall_y, TILESIZE, TILESIZE))
 
 # scoring
-def draw_score(score):
+def draw_score1(score1):
     font = pygame.font.SysFont('Emulogic', 50, bold=True)
-    score_text = font.render(f"S C O R E : {score}", True, (255, 255, 255))  # Render the score in white color
-    screen.blit(score_text, (10, 75))  # output score top-left corner
+    score1_text = font.render(f"S C O R E : {score1}", True, (255, 255, 255))  # Render the score in white color
+    screen.blit(score1_text, (10, 75))  # output score top-left corner
+
+def draw_score2(score2):
+    font = pygame.font.SysFont('Emulogic', 50, bold=True)
+    score2_text = font.render(f"S C O R E : {score2}", True, (255, 255, 255))  # Render the score in white color
+    screen.blit(score2_text, (10, 75))  # output score top-left corner
 
 
 # coins
@@ -396,11 +402,11 @@ def draw_coins_1():
         screen.blit(coin_image, (coin_x, coin_y))
 # coin collisions
 def coin_collision(sprite_x, sprite_y):
-    global score
+    global score1
     sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
     if sprite_pos in level1_coins:
         level1_coins.remove(sprite_pos)
-        score += 50  # +50 points to the score
+        score1 += 50  # +50 points to the score
 
 
 # trophy
@@ -478,6 +484,10 @@ while run:
             run = False
 
     elif state == PLAY:
+        font = pygame.font.SysFont('Emulogic', 30, bold=True)
+        score1_text = font.render(f"S C O R E : {score1}", True, (255, 255, 255))  # Render the score in white color
+        screen.blit(score1_text, (250, 350))  # output score top-left corner
+
         if level1_button.draw(screen):
             print("1")
             level1()
@@ -625,7 +635,7 @@ while run:
         # loading sprite on grid
         display_sprite(sprite_x // TILESIZE, sprite_y // TILESIZE)
         draw_walls_1()
-        draw_score(score)
+        draw_score1(score1)
         draw_coins_1()
         coin_collision(sprite_x, sprite_y)
         draw_trophy()
@@ -639,7 +649,7 @@ while run:
         # loading sprite on grid
         display_sprite(sprite_x // TILESIZE, sprite_y // TILESIZE)
         score = 0
-        draw_score(score)
+        draw_score2(score2)
         draw_walls_2()
         coin_collision(sprite_x, sprite_y)
         #draw_trophy()
@@ -659,8 +669,8 @@ while run:
 
     elif state == COMPLETE:
         font = pygame.font.SysFont('Emulogic', 50, bold=True)
-        score_text = font.render(f"S C O R E : {score}", True, (255, 255, 255))  # Render the score in white color
-        screen.blit(score_text, (500, 300))  # output score top-left corner
+        score_text1 = font.render(f"S C O R E : {score1}", True, (255, 255, 255))  # Render the score in white color
+        screen.blit(score_text1, (500, 300))  # output score top-left corner
         star1_button.draw(screen)
         star2_button.draw(screen)
         complete_button.draw(screen)
@@ -673,6 +683,5 @@ while run:
             state = MAIN_MENU
             sprite_x, sprite_y = initial_sprite_x, initial_sprite_y  # Reset sprite position
             pygame.display.set_caption("Main Menu")
-
 
     pygame.display.update()
