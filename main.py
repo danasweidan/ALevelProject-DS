@@ -318,10 +318,6 @@ level2_walls = [(0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), 
                 (11, 5), (11, 4), (10, 4), (12, 7), (13, 7), (14, 7), (14, 8), (14, 9), (15, 9), (17, 10), (17, 9),
                 (17, 8), (17, 6), (18, 6), (19, 6), (19, 7), (19, 9), (14, 6), (15, 6), (16, 6), (19, 6), (20, 4), (18, 4),
                 (18, 5), (16, 3), (16, 4), (15, 4), (14, 4), (13, 4)
-
-
-
-
                ]
 
 
@@ -404,7 +400,13 @@ level1_coins = [(7, 10), (7, 9), (7, 8), (1, 3), (1, 4), (2, 3), (2, 4), (5, 3),
                 (17, 3), (17, 4), (17, 5), (19, 3), (19, 4), (19, 5), (20, 3), (20, 4), (20, 5), (15, 10), (16, 10),
                 (17, 10), (18, 10), (1, 6), (1, 7), (1, 8),(15, 10), (15, 10), (10, 3), (11, 3), (12, 3), (13, 3)
                 ]
+level2_coins = [(1, 9), (1, 8), (1, 7), (1, 6), (1, 4), (1, 3), (2, 3), (8, 3), (8, 4), (8, 5), (8, 6), (8, 10),
+                (9, 10), (10, 10), (11, 10), (15, 8), (15, 7), (20, 10), (20, 9), (20, 8), (19, 10), (19, 8), (18, 10), (18, 9),
+                (18, 8), (20, 3), (19, 3), (19, 4), (19, 5), (20, 5), (12, 3), (12, 4), (12, 5), (12, 6), (13, 6),
+                (18, 9), (20, 6),(20, 7), (10, 5), (10, 6), (10, 7)
+               ]
 
+# level1
 # function for placing the coins
 def draw_coins_1():
     for coin_pos in level1_coins:
@@ -412,12 +414,25 @@ def draw_coins_1():
         coin_y = coin_pos[1] * TILESIZE + 15
         screen.blit(coin_image, (coin_x, coin_y))
 # coin collisions
-def coin_collision(sprite_x, sprite_y):
+def coin_collision1(sprite_x, sprite_y):
     global score1
     sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
     if sprite_pos in level1_coins:
         level1_coins.remove(sprite_pos)
         score1 += 50  # +50 points to the score
+# level2
+def draw_coins_2():
+    for coin_pos in level2_coins:
+        coin_x = coin_pos[0] * TILESIZE + 15
+        coin_y = coin_pos[1] * TILESIZE + 15
+        screen.blit(coin_image, (coin_x, coin_y))
+# coin collisions
+def coin_collision2(sprite_x, sprite_y):
+    global score2
+    sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
+    if sprite_pos in level2_coins:
+        level2_coins.remove(sprite_pos)
+        score2 += 50  # +50 points to the score
 
 
 # trophy
@@ -465,11 +480,12 @@ while run:
         new_y += 1
 
     # Check for collision with walls
-    if (new_x // TILESIZE, new_y // TILESIZE) not in level1_walls:
-        sprite_x, sprite_y = new_x, new_y
+    if state == LEVEL1:
+        if (new_x // TILESIZE, new_y // TILESIZE) not in level1_walls:
+            sprite_x, sprite_y = new_x, new_y
 
     if state == LEVEL2:
-        if (new_x // TILESIZE, new_y // TILESIZE) in level1_walls:
+        if (new_x // TILESIZE, new_y // TILESIZE) not in level2_walls:
             sprite_x, sprite_y = new_x, new_y
 
     screen.blit(current_background, (0, 0))  # scaling main menu image
@@ -650,7 +666,7 @@ while run:
         draw_walls_1()
         draw_score1(score1)
         draw_coins_1()
-        coin_collision(sprite_x, sprite_y)
+        coin_collision1(sprite_x, sprite_y)
         draw_trophy()
         if trophy_collision(sprite_x, sprite_y):
             complete()
@@ -664,7 +680,8 @@ while run:
         score = 0
         draw_score2(score2)
         draw_walls_2()
-        coin_collision(sprite_x, sprite_y)
+        draw_coins_2()
+        coin_collision2(sprite_x, sprite_y)
         #draw_trophy()
         #if trophy_collision(sprite_x, sprite_y):
            # complete()
@@ -687,7 +704,8 @@ while run:
         star1_button.draw(screen)
         star2_button.draw(screen)
         complete_button.draw(screen)
-        resume_button.draw(screen)
+        if resume_button.draw(screen):
+            level2()
         retry_button.draw(screen)
         if exit_button.draw(screen):
             main = pygame.image.load('mainmenu.png')  # loading the main menu background
