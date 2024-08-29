@@ -192,7 +192,9 @@ LEVEL1 = "level1"
 LEVEL2 = "level2"
 PAUSE = "pause"
 GAME_OVER = "game_over"
-COMPLETE = "complete"
+COMPLETE1 = "complete1"  # first level
+COMPLETE2 = "complete2"  # second level
+
 state = MAIN_MENU
 
 
@@ -221,7 +223,7 @@ def play():
 
 # controls function
 def controls():
-    global main, current_background,state
+    global main, current_background, state
     state = CONTROLS
     pygame.display.set_caption("Controls")
     controls_background = pygame.image.load('black.png').convert_alpha() # loading a black image for the background
@@ -231,7 +233,7 @@ def controls():
 
 # custom function
 def custom():
-    global main, current_background,state
+    global main, current_background, state
     state = CUSTOM
     pygame.display.set_caption("Custom")
     custom_background = pygame.image.load('black.png').convert_alpha() # loading a black image for the background
@@ -271,10 +273,19 @@ def pause():
     scaled_main = pygame.transform.scale(main, (1280, 720))  # scaling down the image to fit the screen
     current_background = scaled_main
 
-def complete():
+def complete1():
     global main, current_background, state
-    state = COMPLETE
-    pygame.display.set_caption("Level Complete")
+    state = COMPLETE1
+    pygame.display.set_caption("Level 1 Complete")
+    custom_background = pygame.image.load('black.png').convert_alpha()  # loading a black image for the background
+    current_background = custom_background  # setting the new current background
+    screen.blit(current_background, (0, 0))
+    pygame.display.update()
+
+def complete2():
+    global main, current_background, state
+    state = COMPLETE2
+    pygame.display.set_caption("Level 2 Complete")
     custom_background = pygame.image.load('black.png').convert_alpha()  # loading a black image for the background
     current_background = custom_background  # setting the new current background
     screen.blit(current_background, (0, 0))
@@ -284,7 +295,7 @@ def complete():
 # SPRITES AND SPRITE MOVEMENT
 
 
-GREEN = (128, 255, 0) # temporary
+GREEN = (128, 255, 0)  # temporary
 BLACK = (0, 0, 0)
 
 TILESIZE = 60  # initialising tile size
@@ -679,7 +690,7 @@ while run:
         coin_collision1(sprite_x, sprite_y)
         draw_trophy1()
         if trophy_collision1(sprite_x, sprite_y):
-            complete()
+            complete1()
         if pause_button.draw(screen):
             pause()
 
@@ -694,7 +705,7 @@ while run:
         coin_collision2(sprite_x, sprite_y)
         draw_trophy2()
         if trophy_collision2(sprite_x, sprite_y):
-            complete()
+            complete2()
         if pause_button.draw(screen):
             pause()
 
@@ -707,7 +718,7 @@ while run:
             sprite_x, sprite_y = initial_sprite_x, initial_sprite_y  # Reset sprite position
             pygame.display.set_caption("Main Menu")
 
-    elif state == COMPLETE:
+    elif state == COMPLETE1:
         font = pygame.font.SysFont('Emulogic', 50, bold=True)
         score_text1 = font.render(f"S C O R E : {score1}", True, (255, 255, 255))  # Render the score in white color
         screen.blit(score_text1, (500, 300))  # output score top-left corner
@@ -716,6 +727,23 @@ while run:
         complete_button.draw(screen)
         if resume_button.draw(screen):
             level2()
+        retry_button.draw(screen)
+        if exit_button.draw(screen):
+            main = pygame.image.load('mainmenu.png')  # loading the main menu background
+            scaled_main = pygame.transform.scale(main, (1280, 720))  # scaling down the image to fit the screen
+            current_background = scaled_main
+            state = MAIN_MENU
+            sprite_x, sprite_y = initial_sprite_x, initial_sprite_y  # Reset sprite position
+            pygame.display.set_caption("Main Menu")
+
+    elif state == COMPLETE2:
+        font = pygame.font.SysFont('Emulogic', 50, bold=True)
+        score_text1 = font.render(f"S C O R E : {score2}", True, (255, 255, 255))  # Render the score in white color
+        screen.blit(score_text1, (500, 300))  # output score top-left corner
+        star1_button.draw(screen)
+        star2_button.draw(screen)
+        complete_button.draw(screen)
+        resume_button.draw(screen)
         retry_button.draw(screen)
         if exit_button.draw(screen):
             main = pygame.image.load('mainmenu.png')  # loading the main menu background
