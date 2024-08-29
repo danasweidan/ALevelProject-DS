@@ -2,7 +2,8 @@
 import pygame
 import sys
 import button
-import sprite
+import time
+
 
 pygame.init()
 
@@ -194,6 +195,7 @@ PAUSE = "pause"
 GAME_OVER = "game_over"
 COMPLETE1 = "complete1"  # first level
 COMPLETE2 = "complete2"  # second level
+BONUS_ROUND = "bonus_round"
 
 state = MAIN_MENU
 
@@ -292,6 +294,21 @@ def complete2():
     pygame.display.update()
 
 
+# function for bonus round
+
+clock = pygame.time.Clock()
+start = 1000
+def bonus_round():
+    global main, current_background, state, sprite_x, sprite_y, initial_sprite_x, initial_sprite_y
+    state = BONUS_ROUND
+    pygame.display.set_caption("Bonus Round")
+    custom_background = pygame.image.load('black.png').convert_alpha()  # loading a black image for the background
+    current_background = custom_background  # setting the new current background
+    screen.blit(current_background, (0, 0))
+    sprite_x, sprite_y = initial_sprite_x, initial_sprite_y
+    pygame.display.update()
+
+
 # SPRITES AND SPRITE MOVEMENT
 
 
@@ -372,7 +389,7 @@ def display_sprite(tile_x, tile_y):
     screen.blit(sprite_image, screen_pos)
     return sprite_image
 
-# function for drawing walls on the map- level 1
+# function for drawing walls on the map - level 1
 def draw_walls_1():
     global TILESIZE, level1_walls
     wall_colour = (128, 0, 178)  # purple walls
@@ -481,6 +498,26 @@ def trophy_collision2(sprite_x, sprite_y):
     return False
 
 
+# portal
+portal_image = pygame.image.load('portal.png').convert_alpha()  # loading coin image
+portal_image = pygame.transform.scale(portal_image, (60, 60))  # scale to fit the grid
+portal_position = (5, 10)
+
+# drawing portal on screen
+def draw_portal():
+    portal_x = portal_position[0] * TILESIZE
+    portal_y = portal_position[1] * TILESIZE
+    screen.blit(portal_image, (portal_x, portal_y))
+
+# function to check for collision with the trophy
+def portal_collision(sprite_x, sprite_y):
+    global state
+    sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
+    if sprite_pos == portal_position:
+        return True
+    return False
+
+
 # running the game loop
 run = True
 while run:
@@ -513,6 +550,9 @@ while run:
     if state == LEVEL2:
         if (new_x // TILESIZE, new_y // TILESIZE) not in level2_walls:
             sprite_x, sprite_y = new_x, new_y
+
+    if state == BONUS_ROUND:
+        sprite_x, sprite_y = new_x, new_y
 
     screen.blit(current_background, (0, 0))  # scaling main menu image
 
@@ -704,6 +744,9 @@ while run:
         draw_coins_2()
         coin_collision2(sprite_x, sprite_y)
         draw_trophy2()
+        draw_portal()
+        if portal_collision(sprite_x, sprite_y):
+            bonus_round()
         if trophy_collision2(sprite_x, sprite_y):
             complete2()
         if pause_button.draw(screen):
@@ -752,5 +795,17 @@ while run:
             state = MAIN_MENU
             sprite_x, sprite_y = initial_sprite_x, initial_sprite_y  # Reset sprite position
             pygame.display.set_caption("Main Menu")
+
+    elif state == BONUS_ROUND:
+        draw_grid()
+        display_sprite(sprite_x // TILESIZE, sprite_y // TILESIZE)
+        start -= 0.5
+        if start <= 0:
+            state = LEVEL2
+        font = pygame.font.SysFont('Emulogic', 50, bold=True)
+        time = font.render(f"T I M E R : {int(start/100)}", True, (255, 255, 255))  # Render the score in white color
+        screen.blit(time, (10, 75))  # output score top-left corner
+        score2_text = font.render(f"S C O R E : {score2}", True, (255, 255, 255))  # Render the score in white color
+        screen.blit(score2_text, (1000, 75))  # output score top-left corner
 
     pygame.display.update()
