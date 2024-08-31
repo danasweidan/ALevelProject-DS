@@ -64,7 +64,7 @@ level2_button = button.Button(850, 143, level2_image, 0.5)
 # loading level3 button
 level3_image = pygame.image.load('level3.png').convert_alpha()
 # constructing level3 button
-level3_button = button.Button(640, 300, level3_image, 0.5)
+level3_button = button.Button(640, 360, level3_image, 0.5)
 
 # loading red button
 red_image = pygame.image.load('red.png').convert_alpha()
@@ -189,6 +189,7 @@ CONTROLS = "controls"
 CUSTOM = "custom"
 LEVEL1 = "level1"
 LEVEL2 = "level2"
+LEVEL3 = "level3"
 PAUSE = "pause"
 GAME_OVER = "game_over"
 COMPLETE1 = "complete1"  # first level
@@ -264,6 +265,17 @@ def level2():
     sprite_x, sprite_y = initial_sprite_x, initial_sprite_y  # Reset the sprite's position
     pygame.display.update()
 
+# level 2 function
+def level3():
+    global main, current_background, state, sprite_x, sprite_y, initial_sprite_x, initial_sprite_y
+    state = LEVEL3
+    pygame.display.set_caption("Level 3")
+    custom_background = pygame.image.load('black.png').convert_alpha()  # loading a black image for the background
+    current_background = custom_background  # setting the new current background
+    screen.blit(current_background, (0, 0))
+    sprite_x, sprite_y = initial_sprite_x, initial_sprite_y  # Reset the sprite's position
+    pygame.display.update()
+
 # pause function
 def pause():
     global main, current_background, state, scaled_main
@@ -327,8 +339,8 @@ level1_walls = [(0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), 
                 (1, 2), (2, 2), (3, 2), (4, 2), (5, 2), (6, 2), (7, 2), (8, 2), (9, 2), (10, 2),
                 (11, 2), (12, 2), (13, 2), (14, 2), (15, 2), (16, 2), (18, 2), (19, 2), (20, 2),
                 (1, 5), (2, 5), (6, 5), (6, 4), (6, 6), (8, 3), (8, 4),
-                (16, 3), (18, 3), (16, 4), (18, 4),(16, 5), (18, 5), (16, 6), (15, 6), (10, 5), (11, 5), (12, 5), (13, 5),
-                (16, 7), (17, 7), (18, 7), (13, 7), (13, 8), (13, 9), (16, 8), (16, 9)
+                (16, 3), (18, 3), (16, 4), (18, 4),(16, 5), (18, 5), (16, 6), (15, 6), (10, 5), (11, 5), (12, 5),
+                (13, 5), (16, 7), (17, 7), (18, 7), (13, 7), (13, 8), (13, 9), (16, 8), (16, 9)
                 ]
 # level 2 wall positions
 level2_walls = [(0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), (0, 10), (0, 11),
@@ -351,6 +363,7 @@ level2_walls = [(0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), 
 initial_sprite_x, initial_sprite_y = 1 * TILESIZE, 10 * TILESIZE
 # sprite starting coordinates
 sprite_x, sprite_y = initial_sprite_x, initial_sprite_y
+
 score1 = 0  # starting score for level 1
 score2 = 0  # starting score for level 2
 
@@ -427,19 +440,17 @@ level1_coins = [(7, 10), (7, 9), (7, 8), (1, 3), (1, 4), (2, 3), (2, 4), (5, 3),
                 (17, 10), (18, 10), (1, 6), (1, 7), (1, 8),(15, 10), (15, 10), (10, 3), (11, 3), (12, 3), (13, 3)
                 ]
 level2_coins = [(1, 9), (1, 8), (1, 7), (1, 6), (1, 4), (1, 3), (2, 3), (8, 3), (8, 4), (8, 5), (8, 6), (8, 10),
-                (9, 10), (10, 10), (11, 10), (15, 8), (15, 7), (20, 10), (20, 9), (20, 8), (19, 10), (19, 8), (18, 10), (18, 9),
-                (18, 8), (20, 3), (19, 3), (19, 4), (19, 5), (20, 5), (12, 3), (12, 4), (12, 5), (12, 6), (13, 6),
-                (18, 9), (20, 6),(20, 7), (10, 5), (10, 6), (10, 7)
-               ]
-bonus_coins =[(15, 3), (15, 4), (15, 5), (15, 6), (15, 7), (15, 8), (16, 3), (16, 4), (16, 5), (16, 6), (16, 7),
-              (16, 8),
-              (5, 3), (5, 4), (5, 5), (5, 6), (5, 7), (5, 8), (6, 3), (6, 4), (6, 5), (6, 6), (6, 7), (6, 8),
-              (7, 3), (7, 4), (7, 5), (7, 6), (7, 7), (7, 8), (8, 3), (8, 4), (8, 5), (8, 6), (8, 7), (8, 8),
-              (9, 3), (9, 4), (9, 5), (9, 6), (9, 7), (9, 8), (10, 3), (10, 4), (10, 5), (10, 6), (10, 7), (10, 8),
-              (11, 3), (11, 4), (11, 5), (11, 6), (11, 7), (11, 8), (12, 3), (12, 4), (12, 5), (12, 6), (12, 7),
-              (12, 8), (13, 3), (13, 4), (13, 5), (13, 6), (13, 7), (13, 8), (14, 3), (14, 4), (14, 5), (14, 6),
-              (14, 7), (14, 8)
-            ]
+                (9, 10), (10, 10), (11, 10), (15, 8), (15, 7), (20, 10), (20, 9), (20, 8), (19, 10), (19, 8), (18, 10),
+                (18, 9), (18, 8), (20, 3), (19, 3), (19, 4), (19, 5), (20, 5), (12, 3), (12, 4), (12, 5), (12, 6),
+                (13, 6), (18, 9), (20, 6),(20, 7), (10, 5), (10, 6), (10, 7)]
+bonus_coins = [(15, 3), (15, 4), (15, 5), (15, 6), (15, 7), (15, 8), (16, 3), (16, 4), (16, 5), (16, 6), (16, 7),
+               (16, 8),
+               (5, 3), (5, 4), (5, 5), (5, 6), (5, 7), (5, 8), (6, 3), (6, 4), (6, 5), (6, 6), (6, 7), (6, 8),
+               (7, 3), (7, 4), (7, 5), (7, 6), (7, 7), (7, 8), (8, 3), (8, 4), (8, 5), (8, 6), (8, 7), (8, 8),
+               (9, 3), (9, 4), (9, 5), (9, 6), (9, 7), (9, 8), (10, 3), (10, 4), (10, 5), (10, 6), (10, 7), (10, 8),
+               (11, 3), (11, 4), (11, 5), (11, 6), (11, 7), (11, 8), (12, 3), (12, 4), (12, 5), (12, 6), (12, 7),
+               (12, 8), (13, 3), (13, 4), (13, 5), (13, 6), (13, 7), (13, 8), (14, 3), (14, 4), (14, 5), (14, 6),
+               (14, 7), (14, 8)]
 
 # level1
 # function for placing the coins
@@ -571,6 +582,10 @@ while run:
         if (new_x // TILESIZE, new_y // TILESIZE) not in level2_walls:
             sprite_x, sprite_y = new_x, new_y
 
+    if state == LEVEL3:
+        if (new_x // TILESIZE, new_y // TILESIZE):
+            sprite_x, sprite_y = new_x, new_y
+
     if state == BONUS_ROUND:
         sprite_x, sprite_y = new_x, new_y
 
@@ -607,7 +622,7 @@ while run:
             level2()
 
         if level3_button.draw(screen):
-            print("3")
+            level3()
 
         if back_button.draw(screen):  # drawing back button
             current_background = scaled_main  # resetting to main menu background
@@ -741,7 +756,6 @@ while run:
             pygame.display.set_caption("Main Menu")
 
     elif state == LEVEL1:
-        draw_grid()
         # loading sprite on grid
         display_sprite(sprite_x // TILESIZE, sprite_y // TILESIZE)
         draw_walls_1()
@@ -769,6 +783,14 @@ while run:
             bonus_round()
         if trophy_collision2(sprite_x, sprite_y):
             complete2()
+        if pause_button.draw(screen):
+            pause()
+
+    elif state == LEVEL3:
+        draw_grid()
+        # loading sprite on grid
+        display_sprite(sprite_x // TILESIZE, sprite_y // TILESIZE)
+        score = 0
         if pause_button.draw(screen):
             pause()
 
