@@ -357,7 +357,12 @@ level2_walls = [(0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), 
                 (17, 8), (17, 6), (18, 6), (19, 6), (19, 7), (19, 9), (14, 6), (15, 6), (16, 6), (19, 6), (20, 4), (18, 4),
                 (18, 5), (16, 3), (16, 4), (15, 4), (14, 4), (13, 4)
                ]
-
+level3_walls = [(0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), (0, 10), (0, 11),
+                (1, 11), (2, 11), (3, 11), (4, 11), (5, 11), (6, 11), (7, 11), (8, 11), (9, 11), (10, 11),
+                (11, 11), (12, 11), (13, 11), (14, 11), (15, 11), (16, 11), (17, 11), (18, 11), (19, 11),
+                (20, 11), (21, 11),
+                (21, 2), (21, 3), (21, 4), (21, 5), (21, 6), (21, 7), (21, 8), (21, 9), (21, 10), (21, 11),
+               ]
 
 # initialising the starting position
 initial_sprite_x, initial_sprite_y = 1 * TILESIZE, 10 * TILESIZE
@@ -366,6 +371,7 @@ sprite_x, sprite_y = initial_sprite_x, initial_sprite_y
 
 score1 = 0  # starting score for level 1
 score2 = 0  # starting score for level 2
+score3 = 0  # starting score for level 3
 
 
 # function for drawing out the grid lines
@@ -418,6 +424,16 @@ def draw_walls_2():
         wall_y = pos[1] * TILESIZE
         pygame.draw.rect(screen, wall_colour, (wall_x, wall_y, TILESIZE, TILESIZE))
 
+# level 3 walls
+def draw_walls_3():
+    global TILESIZE, level3_walls
+    wall_colour = (128, 0, 178)  # purple walls
+    for pos in level3_walls:
+        wall_x = pos[0] * TILESIZE
+        wall_y = pos[1] * TILESIZE
+        pygame.draw.rect(screen, wall_colour, (wall_x, wall_y, TILESIZE, TILESIZE))
+
+
 # scoring
 def draw_score1(score1):
     font = pygame.font.SysFont('Emulogic', 50, bold=True)
@@ -428,6 +444,11 @@ def draw_score2(score2):
     font = pygame.font.SysFont('Emulogic', 50, bold=True)
     score2_text = font.render(f"S C O R E : {score2}", True, (255, 255, 255))  # Render the score in white color
     screen.blit(score2_text, (10, 75))  # output score top-left corner
+
+def draw_score3(score3):
+    font = pygame.font.SysFont('Emulogic', 50, bold=True)
+    score1_text = font.render(f"S C O R E : {score3}", True, (255, 255, 255))  # Render the score in white color
+    screen.blit(score1_text, (10, 75))  # output score top-left corner
 
 
 # coins
@@ -451,6 +472,7 @@ bonus_coins = [(15, 3), (15, 4), (15, 5), (15, 6), (15, 7), (15, 8), (16, 3), (1
                (11, 3), (11, 4), (11, 5), (11, 6), (11, 7), (11, 8), (12, 3), (12, 4), (12, 5), (12, 6), (12, 7),
                (12, 8), (13, 3), (13, 4), (13, 5), (13, 6), (13, 7), (13, 8), (14, 3), (14, 4), (14, 5), (14, 6),
                (14, 7), (14, 8)]
+level3_coins = []
 
 # level1
 # function for placing the coins
@@ -480,6 +502,7 @@ def coin_collision2(sprite_x, sprite_y):
         level2_coins.remove(sprite_pos)
         score2 += 50  # +50 points to the score
 
+# bonus round coins
 def draw_coins_b():
     for coin_pos in bonus_coins:
         coin_x = coin_pos[0] * TILESIZE + 15
@@ -491,6 +514,19 @@ def coin_collision_b(sprite_x, sprite_y):
     sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
     if sprite_pos in bonus_coins:
         bonus_coins.remove(sprite_pos)
+        score2 += 50  # +50 points to the score
+
+def draw_coins_3():
+    for coin_pos in level3_coins:
+        coin_x = coin_pos[0] * TILESIZE + 15
+        coin_y = coin_pos[1] * TILESIZE + 15
+        screen.blit(coin_image, (coin_x, coin_y))
+# coin collisions
+def coin_collision3(sprite_x, sprite_y):
+    global score2
+    sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
+    if sprite_pos in level3_coins:
+        level3_coins.remove(sprite_pos)
         score2 += 50  # +50 points to the score
 
 
@@ -583,7 +619,7 @@ while run:
             sprite_x, sprite_y = new_x, new_y
 
     if state == LEVEL3:
-        if (new_x // TILESIZE, new_y // TILESIZE):
+        if (new_x // TILESIZE, new_y // TILESIZE) not in level3_walls:
             sprite_x, sprite_y = new_x, new_y
 
     if state == BONUS_ROUND:
@@ -612,8 +648,10 @@ while run:
         font = pygame.font.SysFont('Emulogic', 30, bold=True)
         score1_text = font.render(f"S C O R E : {score1}", True, (255, 255, 255))
         score2_text = font.render(f"S C O R E : {score2}", True, (255, 255, 255))
+        score3_text = font.render(f"S C O R E : {score3}", True, (255, 255, 255))
         screen.blit(score1_text, (250, 350))  # output score under level1
         screen.blit(score2_text, (680, 350))  # output score under level2
+        screen.blit(score3_text, (480, 680))  # output score under level3
 
         if level1_button.draw(screen):
             level1()
@@ -772,7 +810,6 @@ while run:
         draw_grid()
         # loading sprite on grid
         display_sprite(sprite_x // TILESIZE, sprite_y // TILESIZE)
-        score = 0
         draw_score2(score2)
         draw_walls_2()
         draw_coins_2()
@@ -790,7 +827,10 @@ while run:
         draw_grid()
         # loading sprite on grid
         display_sprite(sprite_x // TILESIZE, sprite_y // TILESIZE)
-        score = 0
+        draw_score3(score3)
+        draw_walls_3()
+        draw_coins_3()
+        coin_collision3(sprite_x, sprite_y)
         if pause_button.draw(screen):
             pause()
 
