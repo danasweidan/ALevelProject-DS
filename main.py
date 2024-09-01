@@ -194,6 +194,7 @@ PAUSE = "pause"
 GAME_OVER = "game_over"
 COMPLETE1 = "complete1"  # first level
 COMPLETE2 = "complete2"  # second level
+COMPLETE3 = "complete3"  # third level
 BONUS_ROUND = "bonus_round"
 
 state = MAIN_MENU
@@ -241,7 +242,6 @@ def custom():
     current_background = custom_background  # setting the new current background
     screen.blit(current_background, (0, 0))
     pygame.display.update()
-
 
 # level 1 function
 def level1():
@@ -298,6 +298,15 @@ def complete2():
     global main, current_background, state
     state = COMPLETE2
     pygame.display.set_caption("Level 2 Complete")
+    custom_background = pygame.image.load('black.png').convert_alpha()  # loading a black image for the background
+    current_background = custom_background  # setting the new current background
+    screen.blit(current_background, (0, 0))
+    pygame.display.update()
+
+def complete3():
+    global main, current_background, state
+    state = COMPLETE3
+    pygame.display.set_caption("Level 3 Complete")
     custom_background = pygame.image.load('black.png').convert_alpha()  # loading a black image for the background
     current_background = custom_background  # setting the new current background
     screen.blit(current_background, (0, 0))
@@ -541,6 +550,7 @@ trophy_image = pygame.image.load('trophy.png').convert_alpha()  # loading coin i
 trophy_image = pygame.transform.scale(trophy_image, (58, 58))  # scale to fit the grid
 trophy_position1 = (17, 2)
 trophy_position2 = (12, 2)
+trophy_position3 = (18, 2)
 
 # level1
 # function to draw the trophy on the screen
@@ -567,6 +577,19 @@ def trophy_collision2(sprite_x, sprite_y):
     global state
     sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
     if sprite_pos == trophy_position2:
+        return True
+    return False
+
+# level 3
+def draw_trophy3():
+    trophy_x = trophy_position3[0] * TILESIZE
+    trophy_y = trophy_position3[1] * TILESIZE
+    screen.blit(trophy_image, (trophy_x, trophy_y))
+
+def trophy_collision3(sprite_x, sprite_y):
+    global state
+    sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
+    if sprite_pos == trophy_position3:
         return True
     return False
 
@@ -837,6 +860,9 @@ while run:
         draw_walls_3()
         draw_coins_3()
         coin_collision3(sprite_x, sprite_y)
+        draw_trophy3()
+        if trophy_collision2(sprite_x, sprite_y):
+            complete3()
         if pause_button.draw(screen):
             pause()
 
@@ -852,7 +878,7 @@ while run:
     elif state == COMPLETE1:
         font = pygame.font.SysFont('Emulogic', 50, bold=True)
         score_text1 = font.render(f"S C O R E : {score1}", True, (255, 255, 255))  # Render the score in white color
-        screen.blit(score_text1, (500, 300))  # output score top-left corner
+        screen.blit(score_text1, (500, 300))  # output score in centre
         star1_button.draw(screen)
         star2_button.draw(screen)
         complete_button.draw(screen)
@@ -870,7 +896,24 @@ while run:
     elif state == COMPLETE2:
         font = pygame.font.SysFont('Emulogic', 50, bold=True)
         score_text1 = font.render(f"S C O R E : {score2}", True, (255, 255, 255))  # Render the score in white color
-        screen.blit(score_text1, (500, 300))  # output score top-left corner
+        screen.blit(score_text1, (500, 300))  # output score in centre
+        star1_button.draw(screen)
+        star2_button.draw(screen)
+        complete_button.draw(screen)
+        resume_button.draw(screen)
+        retry_button.draw(screen)
+        if exit_button.draw(screen):
+            main = pygame.image.load('mainmenu.png')  # loading the main menu background
+            scaled_main = pygame.transform.scale(main, (1280, 720))  # scaling down the image to fit the screen
+            current_background = scaled_main
+            state = MAIN_MENU
+            sprite_x, sprite_y = initial_sprite_x, initial_sprite_y  # Reset sprite position
+            pygame.display.set_caption("Main Menu")
+
+    elif state == COMPLETE3:
+        font = pygame.font.SysFont('Emulogic', 50, bold=True)
+        score_text3 = font.render(f"S C O R E : {score3}", True, (255, 255, 255))  # Render the score in white color
+        screen.blit(score_text1, (500, 300))  # output score in centre
         star1_button.draw(screen)
         star2_button.draw(screen)
         complete_button.draw(screen)
