@@ -489,9 +489,9 @@ bonus_coins = [(15, 3), (15, 4), (15, 5), (15, 6), (15, 7), (15, 8), (16, 3), (1
                (14, 7), (14, 8)]
 level3_coins = [(2, 6), (2, 7), (3, 9), (3, 8), (2, 9), (2, 10), (4, 8), (4, 7), (1, 3), (2, 4), (3, 5), (6, 5), (6, 4),
                 (6, 3), (7, 5), (8, 5), (8, 4), (8, 3), (9, 7), (9, 6), (10, 6), (8, 7), (8, 8), (8, 9), (10, 5),(11, 5)
-
-
-
+                , (19, 10), (20, 10), (20, 9), (20, 8), (20, 7), (20, 6), (20, 5), (20, 4), (20, 3), (19, 8), (19, 4),
+                (19, 6), (18, 6), (18, 5), (18, 7), (10, 3), (11, 3), (12, 3), (13, 3), (14, 3), (15, 3), (15, 4),
+                (16, 4), (17, 3), (17, 4)
                 ]
 
 # level1
@@ -543,11 +543,11 @@ def draw_coins_3():
         screen.blit(coin_image, (coin_x, coin_y))
 # coin collisions
 def coin_collision3(sprite_x, sprite_y):
-    global score2
+    global score3
     sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
     if sprite_pos in level3_coins:
         level3_coins.remove(sprite_pos)
-        score2 += 50  # +50 points to the score
+        score3 += 50  # +50 points to the score
 
 
 # trophy
@@ -866,7 +866,7 @@ while run:
         draw_coins_3()
         coin_collision3(sprite_x, sprite_y)
         draw_trophy3()
-        if trophy_collision2(sprite_x, sprite_y):
+        if trophy_collision3(sprite_x, sprite_y):
             complete3()
         if pause_button.draw(screen):
             pause()
@@ -918,11 +918,11 @@ while run:
     elif state == COMPLETE3:
         font = pygame.font.SysFont('Emulogic', 50, bold=True)
         score_text3 = font.render(f"S C O R E : {score3}", True, (255, 255, 255))  # Render the score in white color
-        screen.blit(score_text1, (500, 300))  # output score in centre
+        screen.blit(score_text3, (500, 300))  # output score in centre
         star1_button.draw(screen)
         star2_button.draw(screen)
         complete_button.draw(screen)
-        resume_button.draw(screen)
+        #resume_button.draw(screen)
         retry_button.draw(screen)
         if exit_button.draw(screen):
             main = pygame.image.load('mainmenu.png')  # loading the main menu background
