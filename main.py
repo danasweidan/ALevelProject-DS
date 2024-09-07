@@ -318,13 +318,13 @@ def complete3():
 clock = pygame.time.Clock()
 start = 1000
 def bonus_round():
-    global main, current_background, state, sprite_x, sprite_y, initial_sprite_x, initial_sprite_y
+    global main, current_background, state, sprite_x, sprite_y
     state = BONUS_ROUND
     pygame.display.set_caption("Bonus Round")
     custom_background = pygame.image.load('black.png').convert_alpha()  # loading a black image for the background
     current_background = custom_background  # setting the new current background
     screen.blit(current_background, (0, 0))
-    sprite_x, sprite_y = initial_sprite_x, initial_sprite_y
+    sprite_x, sprite_y = 10 * TILESIZE, 10 * TILESIZE
     pygame.display.update()
 
 
