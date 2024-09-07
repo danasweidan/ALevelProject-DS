@@ -604,11 +604,13 @@ portal_image = pygame.image.load('portal.png').convert_alpha()  # loading coin i
 portal_image = pygame.transform.scale(portal_image, (60, 60))  # scale to fit the grid
 portal_position = (5, 10)
 
+
 # drawing portal on screen
 def draw_portal():
     portal_x = portal_position[0] * TILESIZE
     portal_y = portal_position[1] * TILESIZE
     screen.blit(portal_image, (portal_x, portal_y))
+    return True
 
 # function to check for collision with the trophy
 def portal_collision(sprite_x, sprite_y):
@@ -841,7 +843,6 @@ while run:
             pause()
 
     elif state == LEVEL2:
-        draw_grid()
         # loading sprite on grid
         display_sprite(sprite_x // TILESIZE, sprite_y // TILESIZE)
         draw_score2(score2)
@@ -905,7 +906,8 @@ while run:
         star1_button.draw(screen)
         star2_button.draw(screen)
         complete_button.draw(screen)
-        resume_button.draw(screen)
+        if resume_button.draw(screen):
+            level3()
         retry_button.draw(screen)
         if exit_button.draw(screen):
             main = pygame.image.load('mainmenu.png')  # loading the main menu background
@@ -922,7 +924,6 @@ while run:
         star1_button.draw(screen)
         star2_button.draw(screen)
         complete_button.draw(screen)
-        #resume_button.draw(screen)
         retry_button.draw(screen)
         if exit_button.draw(screen):
             main = pygame.image.load('mainmenu.png')  # loading the main menu background
@@ -933,15 +934,15 @@ while run:
             pygame.display.set_caption("Main Menu")
 
     elif state == BONUS_ROUND:
-        draw_grid()
         display_sprite(sprite_x // TILESIZE, sprite_y // TILESIZE)
         draw_coins_b()
         coin_collision_b(sprite_x, sprite_y)
         start -= 0.5
         if start <= 0:
+            sprite_x, sprite_y = 4 * TILESIZE, 10 * TILESIZE
             state = LEVEL2
         font = pygame.font.SysFont('Emulogic', 50, bold=True)
-        time = font.render(f"T I M E R : {int(start/100)}", True, (255, 255, 255))  # Render the score in white color
+        time = font.render(f"T I M E R : {int(start/100)} !", True, (255, 0, 0))  # Render the score in white color
         screen.blit(time, (10, 75))  # output score top-left corner
         score2_text = font.render(f"S C O R E : {score2}", True, (255, 255, 255))  # Render the score in white color
         screen.blit(score2_text, (1000, 75))  # output score top-left corner
