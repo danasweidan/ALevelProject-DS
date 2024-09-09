@@ -4,6 +4,7 @@ import sys
 import button
 
 pygame.init()
+pygame.mixer.init()
 
 # creating the display window
 screen_width = 1280
@@ -15,6 +16,10 @@ pygame.display.set_caption("Main Menu")
 main = pygame.image.load('mainmenu.png')  # loading the main menu background
 scaled_main = pygame.transform.scale(main, (1280, 720))  # scaling down the image to fit the screen
 current_background = scaled_main
+
+# sound effects
+sound_coins = pygame.mixer.Sound("mixkit-winning-a-coin-video-game-2069.wav")
+sound_completion = pygame.mixer.Sound("mixkit-completion-of-a-level-2063.wav")
 
 # loading title of game
 title_image = pygame.image.load('pixelpaths.png').convert_alpha()
@@ -190,7 +195,9 @@ CUSTOM = "custom"
 LEVEL1 = "level1"
 LEVEL2 = "level2"
 LEVEL3 = "level3"
-PAUSE = "pause"
+PAUSE1 = "pause1"
+PAUSE2 = "pause2"
+PAUSE3 = "pause3"
 GAME_OVER = "game_over"
 COMPLETE1 = "complete1"  # first level
 COMPLETE2 = "complete2"  # second level
@@ -277,9 +284,25 @@ def level3():
     pygame.display.update()
 
 # pause function
-def pause():
+def pause1():
     global main, current_background, state, scaled_main
-    state = PAUSE
+    state = PAUSE1
+    pygame.display.set_caption("Pause")
+    main = pygame.image.load('pausemenu.png')  # loading the main menu background
+    scaled_main = pygame.transform.scale(main, (1280, 720))  # scaling down the image to fit the screen
+    current_background = scaled_main
+
+def pause2():
+    global main, current_background, state, scaled_main
+    state = PAUSE2
+    pygame.display.set_caption("Pause")
+    main = pygame.image.load('pausemenu.png')  # loading the main menu background
+    scaled_main = pygame.transform.scale(main, (1280, 720))  # scaling down the image to fit the screen
+    current_background = scaled_main
+
+def pause3():
+    global main, current_background, state, scaled_main
+    state = PAUSE3
     pygame.display.set_caption("Pause")
     main = pygame.image.load('pausemenu.png')  # loading the main menu background
     scaled_main = pygame.transform.scale(main, (1280, 720))  # scaling down the image to fit the screen
@@ -506,6 +529,7 @@ def coin_collision1(sprite_x, sprite_y):
     global score1
     sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
     if sprite_pos in level1_coins:
+        sound_coins.play()
         level1_coins.remove(sprite_pos)
         score1 += 50  # +50 points to the score
 # level2
@@ -519,6 +543,7 @@ def coin_collision2(sprite_x, sprite_y):
     global score2
     sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
     if sprite_pos in level2_coins:
+        sound_coins.play()
         level2_coins.remove(sprite_pos)
         score2 += 50  # +50 points to the score
 
@@ -533,6 +558,7 @@ def coin_collision_b(sprite_x, sprite_y):
     global score2
     sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
     if sprite_pos in bonus_coins:
+        sound_coins.play()
         bonus_coins.remove(sprite_pos)
         score2 += 50  # +50 points to the score
 
@@ -546,6 +572,7 @@ def coin_collision3(sprite_x, sprite_y):
     global score3
     sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
     if sprite_pos in level3_coins:
+        sound_coins.play()
         level3_coins.remove(sprite_pos)
         score3 += 50  # +50 points to the score
 
@@ -569,6 +596,7 @@ def trophy_collision1(sprite_x, sprite_y):
     global state
     sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
     if sprite_pos == trophy_position1:
+        sound_completion.play()
         return True
     return False
 
@@ -582,6 +610,7 @@ def trophy_collision2(sprite_x, sprite_y):
     global state
     sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
     if sprite_pos == trophy_position2:
+        sound_completion.play()
         return True
     return False
 
@@ -595,6 +624,7 @@ def trophy_collision3(sprite_x, sprite_y):
     global state
     sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
     if sprite_pos == trophy_position3:
+        sound_completion.play()
         return True
     return False
 
@@ -840,7 +870,7 @@ while run:
         if trophy_collision1(sprite_x, sprite_y):
             complete1()
         if pause_button.draw(screen):
-            pause()
+            pause1()
 
     elif state == LEVEL2:
         # loading sprite on grid
@@ -856,7 +886,7 @@ while run:
         if trophy_collision2(sprite_x, sprite_y):
             complete2()
         if pause_button.draw(screen):
-            pause()
+            pause2()
 
     elif state == LEVEL3:
         draw_grid()
@@ -870,9 +900,10 @@ while run:
         if trophy_collision3(sprite_x, sprite_y):
             complete3()
         if pause_button.draw(screen):
-            pause()
+            pause3()
 
-    elif state == PAUSE:
+    elif state == PAUSE1:
+        retry_button.draw(screen)
         if exit_button.draw(screen):
             main = pygame.image.load('mainmenu.png')  # loading the main menu background
             scaled_main = pygame.transform.scale(main, (1280, 720))  # scaling down the image to fit the screen
@@ -880,6 +911,35 @@ while run:
             state = MAIN_MENU
             sprite_x, sprite_y = initial_sprite_x, initial_sprite_y  # Reset sprite position
             pygame.display.set_caption("Main Menu")
+        if resume_button.draw(screen):
+            level1()
+            sprite_x, sprite_y = new_x, new_y
+
+    elif state == PAUSE2:
+        retry_button.draw(screen)
+        if exit_button.draw(screen):
+            main = pygame.image.load('mainmenu.png')  # loading the main menu background
+            scaled_main = pygame.transform.scale(main, (1280, 720))  # scaling down the image to fit the screen
+            current_background = scaled_main
+            state = MAIN_MENU
+            sprite_x, sprite_y = initial_sprite_x, initial_sprite_y  # Reset sprite position
+            pygame.display.set_caption("Main Menu")
+        if resume_button.draw(screen):
+            level2()
+            sprite_x, sprite_y = new_x, new_y
+
+    elif state == PAUSE3:
+        retry_button.draw(screen)
+        if exit_button.draw(screen):
+            main = pygame.image.load('mainmenu.png')  # loading the main menu background
+            scaled_main = pygame.transform.scale(main, (1280, 720))  # scaling down the image to fit the screen
+            current_background = scaled_main
+            state = MAIN_MENU
+            sprite_x, sprite_y = initial_sprite_x, initial_sprite_y  # Reset sprite position
+            pygame.display.set_caption("Main Menu")
+        if resume_button.draw(screen):
+            level3()
+            sprite_x, sprite_y = new_x, new_y
 
     elif state == COMPLETE1:
         font = pygame.font.SysFont('Emulogic', 50, bold=True)
