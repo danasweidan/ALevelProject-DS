@@ -59,6 +59,10 @@ keys_image = pygame.image.load('keys.png').convert_alpha()
 # constructing keys
 keys_button = button.Button(550, 460, keys_image, 0.5)
 
+# loading sfx and music text
+music_sfx_image = pygame.image.load('sfx_music.png').convert_alpha()
+music_sfx_button = button.Button(400, 120, music_sfx_image, 0.9)
+
 # loading level1 button
 level1_image = pygame.image.load('level1.png').convert_alpha()
 # constructing level1 button
@@ -674,7 +678,7 @@ sound_countdown.set_volume(volume2)
 
 # sliders settings
 slider_x = 660  # x pox of slider
-slider_y = 100  # y pos of slider
+slider_y = 140  # y pos of slider
 slider_width = 500
 slider_height = 30
 # knob on slider
@@ -683,7 +687,7 @@ thumb_height = 60
 thumb_x = slider_x + int(volume * slider_width) - (thumb_width // 2)  # initial knob position
 
 slider_x_sfx = 660  # x pox of 2nd slider
-slider_y_sfx = 300  # y pos of 2nd slider
+slider_y_sfx = 270  # y pos of 2nd slider
 # knob on 2nd slider
 thumb_x_sfx = slider_x_sfx + int(volume2 * slider_width) - (thumb_width // 2)  # initial knob position
 
@@ -729,9 +733,9 @@ while run:
         if event.type == pygame.MOUSEMOTION:
             if drag1:
                 mouse_x, _ = pygame.mouse.get_pos()
-                # Update the thumb's x position (clamp within the slider's bounds)
+                # thumb x pos within width range
                 thumb_x = max(slider_x - (thumb_width // 2), min(mouse_x, slider_x + slider_width - (thumb_width // 2)))
-                # Calculate the new volume based on the thumb position
+                # calculate new volume based on the thumb position
                 volume = (thumb_x - slider_x + (thumb_width // 2)) / slider_width
                 pygame.mixer.music.set_volume(volume)
 
@@ -748,7 +752,6 @@ while run:
         if event.type == pygame.MOUSEMOTION:
             if drag2:
                 mouse_x_sfx, _ = pygame.mouse.get_pos()
-                # Update the thumb's x position (clamp within the slider's bounds)
                 thumb_x_sfx = max(slider_x_sfx - (thumb_width // 2), min(mouse_x_sfx, slider_x_sfx + slider_width
                                                                          - (thumb_width // 2)))
                 volume2 = (thumb_x_sfx - slider_x_sfx + (thumb_width // 2)) / slider_width
@@ -757,10 +760,8 @@ while run:
                 sound_buttons.set_volume(volume2)
                 sound_bonus.set_volume(volume2)
                 sound_countdown.set_volume(volume2)
-
         if drag1:
             drag2 = False
-
 
     # Handling movement
     keys = pygame.key.get_pressed()
@@ -850,6 +851,7 @@ while run:
             state = MAIN_MENU
             pygame.display.set_caption("Main Menu")
         draw_slider()
+        music_sfx_button.draw(screen)
 
     elif state == CUSTOM:
         # drawing colours out
