@@ -20,6 +20,9 @@ current_background = scaled_main
 # sound effects
 sound_coins = pygame.mixer.Sound("mixkit-winning-a-coin-video-game-2069.wav")
 sound_completion = pygame.mixer.Sound("mixkit-completion-of-a-level-2063.wav")
+sound_buttons = pygame.mixer.Sound("mixkit-retro-arcade-casino-notification-211.wav")
+sound_bonus = pygame.mixer.Sound("mixkit-extra-bonus-in-a-video-game-2045.wav")
+sound_countdown = pygame.mixer.Sound("mixkit-start-countdown-927.wav")
 
 # loading title of game
 title_image = pygame.image.load('pixelpaths.png').convert_alpha()
@@ -558,7 +561,6 @@ def coin_collision_b(sprite_x, sprite_y):
     global score2
     sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
     if sprite_pos in bonus_coins:
-        sound_coins.play()
         bonus_coins.remove(sprite_pos)
         score2 += 50  # +50 points to the score
 
@@ -699,12 +701,15 @@ while run:
 
         # drawing buttons
         if play_button.draw(screen):
+            sound_buttons.play()
             play()
 
         if controls_button.draw(screen):
+            sound_buttons.play()
             controls()
 
         if custom_button.draw(screen):
+            sound_buttons.play()
             custom()
 
         if quit_button.draw(screen):
@@ -720,21 +725,26 @@ while run:
         screen.blit(score3_text, (480, 680))  # output score under level3
 
         if level1_button.draw(screen):
+            sound_buttons.play()
             level1()
 
         if level2_button.draw(screen):
+            sound_buttons.play()
             level2()
 
         if level3_button.draw(screen):
+            sound_buttons.play()
             level3()
 
         if back_button.draw(screen):  # drawing back button
+            sound_buttons.play()
             current_background = scaled_main  # resetting to main menu background
             state = MAIN_MENU
             pygame.display.set_caption("Main Menu")
 
     elif state == CONTROLS:
         keys_button.draw(screen)  # drawing back button
+        sound_buttons.play()
         if back_button.draw(screen):
             current_background = scaled_main  # resetting to main menu background
             state = MAIN_MENU
@@ -905,6 +915,7 @@ while run:
     elif state == PAUSE1:
         retry_button.draw(screen)
         if exit_button.draw(screen):
+            sound_buttons.play()
             main = pygame.image.load('mainmenu.png')  # loading the main menu background
             scaled_main = pygame.transform.scale(main, (1280, 720))  # scaling down the image to fit the screen
             current_background = scaled_main
@@ -912,12 +923,14 @@ while run:
             sprite_x, sprite_y = initial_sprite_x, initial_sprite_y  # Reset sprite position
             pygame.display.set_caption("Main Menu")
         if resume_button.draw(screen):
+            sound_buttons.play()
             level1()
             sprite_x, sprite_y = new_x, new_y
 
     elif state == PAUSE2:
         retry_button.draw(screen)
         if exit_button.draw(screen):
+            sound_buttons.play()
             main = pygame.image.load('mainmenu.png')  # loading the main menu background
             scaled_main = pygame.transform.scale(main, (1280, 720))  # scaling down the image to fit the screen
             current_background = scaled_main
@@ -925,12 +938,14 @@ while run:
             sprite_x, sprite_y = initial_sprite_x, initial_sprite_y  # Reset sprite position
             pygame.display.set_caption("Main Menu")
         if resume_button.draw(screen):
+            sound_buttons.play()
             level2()
             sprite_x, sprite_y = new_x, new_y
 
     elif state == PAUSE3:
         retry_button.draw(screen)
         if exit_button.draw(screen):
+            sound_buttons.play()
             main = pygame.image.load('mainmenu.png')  # loading the main menu background
             scaled_main = pygame.transform.scale(main, (1280, 720))  # scaling down the image to fit the screen
             current_background = scaled_main
@@ -938,6 +953,7 @@ while run:
             sprite_x, sprite_y = initial_sprite_x, initial_sprite_y  # Reset sprite position
             pygame.display.set_caption("Main Menu")
         if resume_button.draw(screen):
+            sound_buttons.play()
             level3()
             sprite_x, sprite_y = new_x, new_y
 
@@ -949,9 +965,11 @@ while run:
         star2_button.draw(screen)
         complete_button.draw(screen)
         if resume_button.draw(screen):
+            sound_buttons.play()
             level2()
         retry_button.draw(screen)
         if exit_button.draw(screen):
+            sound_buttons.play()
             main = pygame.image.load('mainmenu.png')  # loading the main menu background
             scaled_main = pygame.transform.scale(main, (1280, 720))  # scaling down the image to fit the screen
             current_background = scaled_main
@@ -967,9 +985,11 @@ while run:
         star2_button.draw(screen)
         complete_button.draw(screen)
         if resume_button.draw(screen):
+            sound_buttons.play()
             level3()
         retry_button.draw(screen)
         if exit_button.draw(screen):
+            sound_buttons.play()
             main = pygame.image.load('mainmenu.png')  # loading the main menu background
             scaled_main = pygame.transform.scale(main, (1280, 720))  # scaling down the image to fit the screen
             current_background = scaled_main
@@ -986,6 +1006,7 @@ while run:
         complete_button.draw(screen)
         retry_button.draw(screen)
         if exit_button.draw(screen):
+            sound_buttons.play()
             main = pygame.image.load('mainmenu.png')  # loading the main menu background
             scaled_main = pygame.transform.scale(main, (1280, 720))  # scaling down the image to fit the screen
             current_background = scaled_main
@@ -995,10 +1016,12 @@ while run:
 
     elif state == BONUS_ROUND:
         display_sprite(sprite_x // TILESIZE, sprite_y // TILESIZE)
+        sound_countdown.play()
         draw_coins_b()
         coin_collision_b(sprite_x, sprite_y)
-        start -= 0.5
+        start -= 0.35
         if start <= 0:
+            sound_bonus.play()
             sprite_x, sprite_y = 4 * TILESIZE, 10 * TILESIZE
             state = LEVEL2
         font = pygame.font.SysFont('Emulogic', 50, bold=True)
