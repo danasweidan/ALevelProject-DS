@@ -664,18 +664,28 @@ def portal_collision(sprite_x, sprite_y):
 pygame.mixer.music.load("game-music-loop-6-144641.mp3")
 pygame.mixer.music.play(-1)  # loops the music
 volume = 0.5
+volume2 = 0.5
 pygame.mixer.music.set_volume(volume)
+sound_coins.set_volume(volume2)
+sound_completion.set_volume(volume2)
+sound_buttons.set_volume(volume2)
+sound_bonus.set_volume(volume2)
+sound_countdown.set_volume(volume2)
 
 # sliders settings
 slider_x = 660  # x pox of slider
 slider_y = 100  # y pos of slider
 slider_width = 500
 slider_height = 30
-
 # knob on slider
 thumb_width = 30
 thumb_height = 60
 thumb_x = slider_x + int(volume * slider_width) - (thumb_width // 2)  # initial knob position
+
+slider_x_sfx = 660  # x pox of 2nd slider
+slider_y_sfx = 300  # y pos of 2nd slider
+# knob on 2nd slider
+thumb_x_sfx = slider_x_sfx + int(volume2 * slider_width) - (thumb_width // 2)  # initial knob position
 
 # colours
 ORANGE = (255, 165, 0)
@@ -687,9 +697,14 @@ def draw_slider():
     pygame.draw.rect(screen, GREY, (slider_x, slider_y, slider_width, slider_height))
     # drawing knob
     pygame.draw.rect(screen, ORANGE, (thumb_x, slider_y - (thumb_height // 2) + 10, thumb_width, thumb_height))
+    # drawing 2nd slider
+    pygame.draw.rect(screen, GREY, (slider_x_sfx, slider_y_sfx, slider_width, slider_height))
+    # 2nd knob
+    pygame.draw.rect(screen, ORANGE, (thumb_x_sfx, slider_y_sfx - (thumb_height // 2) + 10, thumb_width, thumb_height))
 
 
-drag = False
+drag1 = False
+drag2 = False
 
 # running the game loop
 run = True
@@ -705,20 +720,47 @@ while run:
             mouse_x, mouse_y = pygame.mouse.get_pos()
             if (thumb_x <= mouse_x <= thumb_x + thumb_width and
                     slider_y - (thumb_height // 2) <= mouse_y <= slider_y + (thumb_height // 2)):
-                drag = True
+                drag1 = True
         # letting go of right mouse
         if event.type == pygame.MOUSEBUTTONUP:
-            drag = False
+            drag1 = False
 
             # Handle mouse motion event
         if event.type == pygame.MOUSEMOTION:
-            if drag:
+            if drag1:
                 mouse_x, _ = pygame.mouse.get_pos()
                 # Update the thumb's x position (clamp within the slider's bounds)
                 thumb_x = max(slider_x - (thumb_width // 2), min(mouse_x, slider_x + slider_width - (thumb_width // 2)))
                 # Calculate the new volume based on the thumb position
                 volume = (thumb_x - slider_x + (thumb_width // 2)) / slider_width
                 pygame.mixer.music.set_volume(volume)
+
+        # 2nd slider
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_x_sfx, mouse_y_sfx = pygame.mouse.get_pos()
+            if (thumb_x_sfx <= mouse_x_sfx <= thumb_x_sfx + thumb_width and
+                    slider_y_sfx - (thumb_height // 2) <= mouse_y_sfx <= slider_y_sfx + (thumb_height // 2)):
+                drag2 = True
+
+        if event.type == pygame.MOUSEBUTTONUP:
+            drag2 = False
+
+        if event.type == pygame.MOUSEMOTION:
+            if drag2:
+                mouse_x_sfx, _ = pygame.mouse.get_pos()
+                # Update the thumb's x position (clamp within the slider's bounds)
+                thumb_x_sfx = max(slider_x_sfx - (thumb_width // 2), min(mouse_x_sfx, slider_x_sfx + slider_width
+                                                                         - (thumb_width // 2)))
+                volume2 = (thumb_x_sfx - slider_x_sfx + (thumb_width // 2)) / slider_width
+                sound_coins.set_volume(volume2)
+                sound_completion.set_volume(volume2)
+                sound_buttons.set_volume(volume2)
+                sound_bonus.set_volume(volume2)
+                sound_countdown.set_volume(volume2)
+
+        if drag1:
+            drag2 = False
+
 
     # Handling movement
     keys = pygame.key.get_pressed()
