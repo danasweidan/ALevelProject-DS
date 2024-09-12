@@ -657,6 +657,32 @@ def portal_collision(sprite_x, sprite_y):
         return True
     return False
 
+# VOLUME SLIDERS
+
+''''# loading music and setting initial volume
+pygame.mixer.music.load("")
+pygame.mixer.music.play(-1)  # loops the music
+
+pygame.mixer.music.set_volume(volume)'''
+volume = 0.5
+
+
+# sliders settings
+slider_x = 660  # x pox of slider
+slider_y = 100  # y pos of slider
+slider_width = 400
+slider_height = 20
+
+# knob on slider
+thumb_width = 20
+thumb_height = 20
+thumb_x = slider_x + int(volume * slider_width) - (thumb_width // 2)  # initial knob position
+
+WHITE = (0,0,0)
+def draw_slider():
+    pygame.draw.rect(screen, GREEN, (slider_x, slider_y, slider_width, slider_height))
+    pygame.draw.rect(screen, WHITE, (thumb_x, slider_y - (thumb_height // 2), thumb_width, thumb_height))
+
 
 # running the game loop
 run = True
@@ -749,11 +775,12 @@ while run:
 
     elif state == CONTROLS:
         keys_button.draw(screen)  # drawing back button
-        sound_buttons.play()
-        if back_button.draw(screen):
+        if back_button.draw(screen):  # drawing back button
+            sound_buttons.play()
             current_background = scaled_main  # resetting to main menu background
             state = MAIN_MENU
             pygame.display.set_caption("Main Menu")
+        draw_slider()
 
     elif state == CUSTOM:
         # drawing colours out
@@ -870,6 +897,7 @@ while run:
             pinkSprite_button.draw(screen)
 
         if back_button.draw(screen):  # drawing back button
+            sound_buttons.play()
             current_background = scaled_main  # resetting to main menu background
             state = MAIN_MENU
             pygame.display.set_caption("Main Menu")
