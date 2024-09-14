@@ -210,6 +210,7 @@ COMPLETE1 = "complete1"  # first level
 COMPLETE2 = "complete2"  # second level
 COMPLETE3 = "complete3"  # third level
 BONUS_ROUND = "bonus_round"
+SHOOT = "shooting"
 
 state = MAIN_MENU
 
@@ -639,25 +640,55 @@ def trophy_collision3(sprite_x, sprite_y):
         return True
     return False
 
+# BONUS ROUND
+
 
 # portal
-portal_image = pygame.image.load('portal.png').convert_alpha()  # loading coin image
+portal_image = pygame.image.load('portal.png').convert_alpha()  # loading portal image
 portal_image = pygame.transform.scale(portal_image, (60, 60))  # scale to fit the grid
 portal_position = (5, 10)
 
 
 # drawing portal on screen
+portal_draw = True
 def draw_portal():
-    portal_x = portal_position[0] * TILESIZE
-    portal_y = portal_position[1] * TILESIZE
-    screen.blit(portal_image, (portal_x, portal_y))
+    if portal_draw:
+        portal_x = portal_position[0] * TILESIZE
+        portal_y = portal_position[1] * TILESIZE
+        screen.blit(portal_image, (portal_x, portal_y))
     return True
 
-# function to check for collision with the trophy
+# function to check for collision with the portal
 def portal_collision(sprite_x, sprite_y):
     global state
     sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
     if sprite_pos == portal_position:
+        return True
+    return False
+
+
+# SHOOTING
+
+# bullets
+ammo_image = pygame.image.load('ammo.png').convert_alpha()  # loading bullets image
+ammo_image = pygame.transform.scale(ammo_image, (50, 50))  # scale to fit the grid
+ammo_position = (8, 10)
+
+
+# drawing ammo on screen
+draw_ammo = True
+def draw_bullets():
+    if draw_ammo:
+        bullets_x = ammo_position[0] * TILESIZE + 5
+        bullets_y = ammo_position[1] * TILESIZE
+        screen.blit(ammo_image, (bullets_x, bullets_y))
+    return True
+
+# function to check for collision with the bullets
+def bullets_collision(sprite_x, sprite_y):
+    global state
+    sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
+    if sprite_pos == ammo_position:
         return True
     return False
 
@@ -792,7 +823,6 @@ while run:
 
     if state == BONUS_ROUND:
         sprite_x, sprite_y = new_x, new_y
-
 
     screen.blit(current_background, (0, 0))  # scaling main menu image
 
@@ -1011,6 +1041,9 @@ while run:
         draw_coins_3()
         coin_collision3(sprite_x, sprite_y)
         draw_trophy3()
+        draw_bullets()
+        if bullets_collision(sprite_x, sprite_y):
+            draw_ammo = False
         if trophy_collision3(sprite_x, sprite_y):
             complete3()
         if pause_button.draw(screen):
@@ -1120,6 +1153,7 @@ while run:
 
     elif state == BONUS_ROUND:
         display_sprite(sprite_x // TILESIZE, sprite_y // TILESIZE)
+        portal_draw = False
         sound_countdown.play()
         draw_coins_b()
         coin_collision_b(sprite_x, sprite_y)
@@ -1133,5 +1167,8 @@ while run:
         screen.blit(time, (10, 75))  # output score top-left corner
         score2_text = font.render(f"S C O R E : {score2}", True, (255, 255, 255))  # Render the score in white color
         screen.blit(score2_text, (1000, 75))  # output score top-left corner
+
+    elif state == SHOOT:
+        ammo_image = pygame.image.load('').convert_alpha()
 
     pygame.display.update()
