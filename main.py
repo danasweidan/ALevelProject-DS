@@ -493,8 +493,8 @@ def draw_score2(score2):
 
 def draw_score3(score3):
     font = pygame.font.SysFont('Emulogic', 50, bold=True)
-    score1_text = font.render(f"S C O R E : {score3}", True, (255, 255, 255))  # Render the score in white color
-    screen.blit(score1_text, (10, 75))  # output score top-left corner
+    score3_text = font.render(f"S C O R E : {score3}", True, (255, 255, 255))  # Render the score in white color
+    screen.blit(score3_text, (10, 75))  # output score top-left corner
 
 
 # coins
@@ -692,6 +692,58 @@ def bullets_collision(sprite_x, sprite_y):
         return True
     return False
 
+
+# enemy
+enemy_image = pygame.image.load('enemy.png').convert_alpha()  # loading enemy image
+enemy_image = pygame.transform.scale(enemy_image, (60, 60))  # scale to fit the grid
+enemy_position = (14, 9)
+
+enemy_draw = True
+
+def draw_enemy():
+    if enemy_draw:
+        enemy_x = enemy_position[0] * TILESIZE
+        enemy_y = enemy_position[1] * TILESIZE
+        screen.blit(enemy_image, (enemy_x, enemy_y))
+    return True
+
+
+# HEALTH
+
+
+max_health = 15  # max health
+current_health = 15
+health_bar_width = 400  # width of the health bar
+health_bar_height = 60  # height of the health bar
+
+
+collided = False
+
+def draw_health_bar():
+    health_percentage = current_health / max_health
+    current_bar_width = int(health_percentage * health_bar_width)
+    # drawing health bar
+    pygame.draw.rect(screen, (0, 0, 0), (0, 0, health_bar_width, health_bar_height), 2)
+    # filling in the health bar amount
+    if current_bar_width > 0:
+        pygame.draw.rect(screen, GREEN, (10, 10, current_bar_width, health_bar_height))
+
+# function to check for collision with the enemy
+def enemy_collision(sprite_x, sprite_y):
+    global current_health, collided
+    sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
+    if sprite_pos == enemy_position:
+        if not collided:
+            current_health -= 5
+            if current_health < 0:  # prevent health from going below 0
+                current_health = 0
+            print(f"Collision detected! Health is now: {current_health}")
+            collided = True
+        else:
+            collided = False
+    return False
+
+
 # VOLUME SLIDERS
 
 
@@ -818,7 +870,7 @@ while run:
             sprite_x, sprite_y = new_x, new_y
 
     if state == LEVEL3:
-        if (new_x // TILESIZE, new_y // TILESIZE) not in level3_walls:
+        if (new_x // TILESIZE, new_y // TILESIZE) not in level3_walls and enemy_position:
             sprite_x, sprite_y = new_x, new_y
 
     if state == BONUS_ROUND:
@@ -1042,6 +1094,10 @@ while run:
         coin_collision3(sprite_x, sprite_y)
         draw_trophy3()
         draw_bullets()
+        draw_enemy()
+        draw_health_bar()
+        enemy_collision(sprite_x, sprite_y)
+
         if bullets_collision(sprite_x, sprite_y):
             draw_ammo = False
         if trophy_collision3(sprite_x, sprite_y):
