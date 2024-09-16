@@ -700,7 +700,9 @@ enemy_position = (14, 9)
 
 enemy_draw = True
 
+
 def draw_enemy():
+    global TILESIZE
     if enemy_draw:
         enemy_x = enemy_position[0] * TILESIZE
         enemy_y = enemy_position[1] * TILESIZE
@@ -728,16 +730,24 @@ def draw_health_bar():
     if current_bar_width > 0:
         pygame.draw.rect(screen, GREEN, (10, 10, current_bar_width, health_bar_height))
 
+# initialize the timer for health reduction
+
+
+last_collision_time = 0
+collision_cooldown = 2000  # 5 seconds in milliseconds
+
 # function to check for collision with the enemy
 def enemy_collision(sprite_x, sprite_y):
-    global current_health, collided
+    global current_health, collided, last_collision_time, collision_cooldown
     sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
-    if sprite_pos == enemy_position:
-        if not collided:
-            current_health -= 5
-            if current_health < 0:  # prevent health from going below 0
-                current_health = 0
-            print(f"Collision detected! Health is now: {current_health}")
+    current_time = pygame.time.get_ticks()
+    if sprite_pos == (13, 9):
+        if current_time - last_collision_time > collision_cooldown:
+            if not collided:
+                current_health -= 5
+                if current_health < 0:  # prevent health from going below 0
+                    current_health = 0
+            last_collision_time = current_time
             collided = True
         else:
             collided = False
@@ -870,7 +880,8 @@ while run:
             sprite_x, sprite_y = new_x, new_y
 
     if state == LEVEL3:
-        if (new_x // TILESIZE, new_y // TILESIZE) not in level3_walls and enemy_position:
+        if ((new_x // TILESIZE, new_y // TILESIZE) not in level3_walls and
+                (new_x // TILESIZE, new_y // TILESIZE) != enemy_position):
             sprite_x, sprite_y = new_x, new_y
 
     if state == BONUS_ROUND:
