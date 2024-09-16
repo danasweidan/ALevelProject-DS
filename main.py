@@ -696,19 +696,29 @@ def bullets_collision(sprite_x, sprite_y):
 # enemy
 enemy_image = pygame.image.load('enemy.png').convert_alpha()  # loading enemy image
 enemy_image = pygame.transform.scale(enemy_image, (60, 60))  # scale to fit the grid
-enemy_position = (14, 9)
 
 enemy_draw = True
 
+move_time = 1500  # 1.5 seconds
+last_switch_time = 0  # checks when the enemy pos was last changed
+sprite_at_first_position = True
+enemy_position_1 = (14, 9)
+enemy_position_2 = (15, 9)
 
-def draw_enemy():
-    global TILESIZE
-    if enemy_draw:
-        enemy_x = enemy_position[0] * TILESIZE
-        enemy_y = enemy_position[1] * TILESIZE
-        screen.blit(enemy_image, (enemy_x, enemy_y))
-    return True
+def draw_moving_enemy():
+    global last_switch_time, sprite_at_first_position
+    current_time = pygame.time.get_ticks()
+    if current_time - last_switch_time >= move_time: # checks if it's been 1.5s
+        sprite_at_first_position = not sprite_at_first_position  # alternates pos
+        last_switch_time = current_time
+    if sprite_at_first_position:
+        current_position = enemy_position_1
+    else:
+        current_position = enemy_position_2
 
+    enemy_x = current_position[0] * TILESIZE
+    enemy_y = current_position[1] * TILESIZE
+    screen.blit(enemy_image, (enemy_x, enemy_y))
 
 # HEALTH
 
@@ -728,7 +738,7 @@ def draw_health_bar():
     pygame.draw.rect(screen, (0, 0, 0), (0, 0, health_bar_width, health_bar_height), 2)
     # filling in the health bar amount
     if current_bar_width > 0:
-        pygame.draw.rect(screen, GREEN, (10, 10, current_bar_width, health_bar_height))
+        pygame.draw.rect(screen, GREEN, (0, 0, current_bar_width, health_bar_height))
 
 # initialize the timer for health reduction
 
@@ -881,7 +891,7 @@ while run:
 
     if state == LEVEL3:
         if ((new_x // TILESIZE, new_y // TILESIZE) not in level3_walls and
-                (new_x // TILESIZE, new_y // TILESIZE) != enemy_position):
+                (new_x // TILESIZE, new_y // TILESIZE) != enemy_position_1 and enemy_position_2):
             sprite_x, sprite_y = new_x, new_y
 
     if state == BONUS_ROUND:
@@ -1105,10 +1115,10 @@ while run:
         coin_collision3(sprite_x, sprite_y)
         draw_trophy3()
         draw_bullets()
-        draw_enemy()
+        if enemy_draw:
+            draw_moving_enemy()
         draw_health_bar()
         enemy_collision(sprite_x, sprite_y)
-
         if bullets_collision(sprite_x, sprite_y):
             draw_ammo = False
         if trophy_collision3(sprite_x, sprite_y):
