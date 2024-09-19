@@ -210,6 +210,7 @@ COMPLETE1 = "complete1"  # first level
 COMPLETE2 = "complete2"  # second level
 COMPLETE3 = "complete3"  # third level
 BONUS_ROUND = "bonus_round"
+BONUS_ROUND2 = "bonus_round2"
 SHOOT = "shooting"
 
 state = MAIN_MENU
@@ -348,6 +349,7 @@ def complete3():
 
 clock = pygame.time.Clock()
 start = 1000
+start2 = 1000
 def bonus_round():
     global main, current_background, state, sprite_x, sprite_y
     state = BONUS_ROUND
@@ -356,6 +358,16 @@ def bonus_round():
     current_background = custom_background  # setting the new current background
     screen.blit(current_background, (0, 0))
     sprite_x, sprite_y = 10 * TILESIZE, 10 * TILESIZE
+    pygame.display.update()
+
+def bonus_round2():
+    global main, current_background, state, sprite_x, sprite_y
+    state = BONUS_ROUND2
+    pygame.display.set_caption("Bonus Round")
+    custom_background = pygame.image.load('black.png').convert_alpha()  # loading a black image for the background
+    current_background = custom_background  # setting the new current background
+    screen.blit(current_background, (0, 0))
+    sprite_x, sprite_y = 11 * TILESIZE, 10 * TILESIZE
     pygame.display.update()
 
 
@@ -400,7 +412,7 @@ level2_walls = [(0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), 
 level3_walls = [(0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), (0, 10), (0, 11),
                 (1, 11), (2, 11), (3, 11), (4, 11), (5, 11), (6, 11), (7, 11), (8, 11), (9, 11), (10, 11),
                 (11, 11), (12, 11), (13, 11), (14, 11), (15, 11), (16, 11), (17, 11), (18, 11), (19, 11),
-                (20, 11), (21, 11),
+                (20, 11), (21, 11),(2, 4),
                 (21, 2), (21, 3), (21, 4), (21, 5), (21, 6), (21, 7), (21, 8), (21, 9), (21, 10), (21, 11),
                 (9, 9), (3, 10), (4, 9), (2, 8), (5, 8), (3, 7), (4, 6), (3, 6), (6, 8), (7, 8), (9, 10), (6, 6),
                 (7, 6), (8, 6), (1, 2), (2, 2), (3, 2), (4, 2), (5, 2), (6, 2), (7, 2), (8, 2), (9, 2), (10, 2),
@@ -523,11 +535,25 @@ bonus_coins = [(15, 2), (15, 3), (15, 4), (15, 5), (15, 6), (15, 7), (15, 8), (1
                (3, 9), (4, 9), (5, 9), (6, 9), (7, 9), (8, 9), (9, 9), (10, 9), (11, 9), (12, 9), (13, 9), (14, 9),
                (15, 9), (16, 9), (17, 9)
                ]
-level3_coins = [(2, 6), (2, 7), (3, 9), (3, 8), (2, 9), (2, 10), (4, 8), (4, 7), (1, 3), (2, 4), (3, 5), (6, 5), (6, 4),
+bonus_coins2 = [(15, 2), (15, 3), (15, 4), (15, 5), (15, 6), (15, 7), (15, 8), (16, 3), (16, 4), (16, 5), (16, 6), (16, 7),
+               (16, 8), (16, 2), (5, 2), (6, 2), (7, 2), (8, 2), (9, 2), (10, 2), (11, 2), (12, 2), (13, 2), (14, 2),
+               (5, 3), (5, 4), (5, 5), (5, 6), (5, 7), (5, 8), (6, 3), (6, 4), (6, 5), (6, 6), (6, 7), (6, 8),
+               (7, 3), (7, 4), (7, 5), (7, 6), (7, 7), (7, 8), (8, 3), (8, 4), (8, 5), (8, 6), (8, 7), (8, 8),
+               (9, 3), (9, 4), (9, 5), (9, 6), (9, 7), (9, 8), (10, 3), (10, 4), (10, 5), (10, 6), (10, 7), (10, 8),
+               (11, 3), (11, 4), (11, 5), (11, 6), (11, 7), (11, 8), (12, 3), (12, 4), (12, 5), (12, 6), (12, 7),
+               (12, 8), (13, 3), (13, 4), (13, 5), (13, 6), (13, 7), (13, 8), (14, 3), (14, 4), (14, 5), (14, 6),
+               (14, 7), (14, 8), (16, 2), (16, 3), (16, 4), (16, 5), (16, 6), (16, 7), (16, 8),
+               (4, 3), (4, 4), (4, 5), (4, 6), (4, 7), (4, 8), (4, 2), (3, 3), (3, 4), (3, 5), (3, 6), (3, 7), (3, 8),
+               (17, 3), (17, 4), (17, 5), (17, 6), (17, 7), (17, 8), (17, 2), (3, 2),
+               (3, 9), (4, 9), (5, 9), (6, 9), (7, 9), (8, 9), (9, 9), (10, 9), (11, 9), (12, 9), (13, 9), (14, 9),
+               (15, 9), (16, 9), (17, 9)
+               ]
+
+level3_coins = [(2, 6), (2, 7), (3, 9), (3, 8), (2, 9), (2, 10), (1, 3), (4, 8), (4, 7), (3, 5), (6, 5), (6, 4),
                 (6, 3), (7, 5), (8, 5), (8, 4), (8, 3), (9, 7), (9, 6), (10, 6), (8, 7), (8, 8), (8, 9), (10, 5),(11, 5)
                 , (19, 10), (20, 10), (20, 9), (20, 8), (20, 7), (20, 6), (20, 5), (20, 4), (20, 3), (19, 8), (19, 4),
                 (19, 6), (18, 6), (18, 5), (18, 7), (10, 3), (11, 3), (12, 3), (13, 3), (14, 3), (15, 3), (15, 4),
-                (16, 4), (17, 3), (17, 4)
+                (16, 4), (17, 3), (17, 4), (4, 5)
                 ]
 
 # level1
@@ -573,6 +599,19 @@ def coin_collision_b(sprite_x, sprite_y):
     if sprite_pos in bonus_coins:
         bonus_coins.remove(sprite_pos)
         score2 += 50  # +50 points to the score
+
+def draw_coins_b2():
+    for coin_pos in bonus_coins2:
+        coin_x = coin_pos[0] * TILESIZE + 15
+        coin_y = coin_pos[1] * TILESIZE + 15
+        screen.blit(coin_image, (coin_x, coin_y))
+
+def coin_collision_b2(sprite_x, sprite_y):
+    global score3
+    sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
+    if sprite_pos in bonus_coins2:
+        bonus_coins2.remove(sprite_pos)
+        score3 += 50  # +50 points to the score
 
 def draw_coins_3():
     for coin_pos in level3_coins:
@@ -647,10 +686,11 @@ def trophy_collision3(sprite_x, sprite_y):
 portal_image = pygame.image.load('portal.png').convert_alpha()  # loading portal image
 portal_image = pygame.transform.scale(portal_image, (60, 60))  # scale to fit the grid
 portal_position = (5, 10)
-
+portal_position2 = (1, 3)
 
 # drawing portal on screen
 portal_draw = True
+portal_draw2 = True
 def draw_portal():
     if portal_draw:
         portal_x = portal_position[0] * TILESIZE
@@ -666,8 +706,24 @@ def portal_collision(sprite_x, sprite_y):
         return True
     return False
 
+def draw_portal2():
+    if portal_draw2:
+        portal_x = portal_position2[0] * TILESIZE
+        portal_y = portal_position2[1] * TILESIZE
+        screen.blit(portal_image, (portal_x, portal_y))
+    return True
+
+# function to check for collision with the portal
+def portal_collision2(sprite_x, sprite_y):
+    global state
+    sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
+    if sprite_pos == portal_position2:
+        return True
+    return False
+
 
 # SHOOTING
+
 
 # bullets
 ammo_image = pygame.image.load('ammo.png').convert_alpha()  # loading bullets image
@@ -896,6 +952,8 @@ while run:
 
     if state == BONUS_ROUND:
         sprite_x, sprite_y = new_x, new_y
+    if state == BONUS_ROUND2:
+        sprite_x, sprite_y = new_x, new_y
 
     screen.blit(current_background, (0, 0))  # scaling main menu image
 
@@ -1114,6 +1172,10 @@ while run:
         draw_coins_3()
         coin_collision3(sprite_x, sprite_y)
         draw_trophy3()
+        draw_portal2()
+        if portal_collision2(sprite_x, sprite_y):
+            sound_countdown.play()
+            bonus_round2()
         draw_bullets()
         if enemy_draw:
             draw_moving_enemy()
@@ -1244,6 +1306,22 @@ while run:
         screen.blit(time, (10, 75))  # output score top-left corner
         score2_text = font.render(f"S C O R E : {score2}", True, (255, 255, 255))  # Render the score in white color
         screen.blit(score2_text, (1000, 75))  # output score top-left corner
+
+    elif state == BONUS_ROUND2:
+        portal_draw2 = False
+        display_sprite(sprite_x // TILESIZE, sprite_y // TILESIZE)
+        draw_coins_b2()
+        coin_collision_b2(sprite_x, sprite_y)
+        start2 -= 0.35
+        if start2 <= 0:
+            sound_bonus.play()
+            sprite_x, sprite_y = 2 * TILESIZE, 3 * TILESIZE
+            state = LEVEL3
+        font = pygame.font.SysFont('Emulogic', 50, bold=True)
+        time = font.render(f"T I M E R : {int(start2/100)} !", True, (255, 0, 0))  # Render the score in white color
+        screen.blit(time, (10, 75))  # output score top-left corner
+        score3_text = font.render(f"S C O R E : {score3}", True, (255, 255, 255))  # Render the score in white color
+        screen.blit(score3_text, (1000, 75))  # output score top-left corner
 
     elif state == SHOOT:
         ammo_image = pygame.image.load('').convert_alpha()
