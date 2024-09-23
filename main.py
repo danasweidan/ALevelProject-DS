@@ -776,6 +776,26 @@ def draw_moving_enemy():
     enemy_y = current_position[1] * TILESIZE
     screen.blit(enemy_image, (enemy_x, enemy_y))
 
+max_bullets = 5
+class Bullets():
+    def __init__(self, x, y):
+        self.image = pygame.image.load("bullet.png")
+        self.rect = self.image.get_rect()
+        self.rect.center = [x, y]
+
+    def update(self):
+        self.rect.x += 5
+
+    def draw(self, surface):
+        self.image = pygame.transform.scale(self.image, (20, 20))
+        surface.blit(self.image, self.rect)
+
+
+bullets = []
+last_shot_time = 0  # to track the last time a bullet was shot
+shoot_delay = 250   # time in milliseconds to wait before allowing another bullet
+
+
 # HEALTH
 
 
@@ -873,6 +893,7 @@ drag2 = False
 run = True
 while run:
     key_handled = False
+    current_time = pygame.time.get_ticks()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -954,6 +975,13 @@ while run:
         sprite_x, sprite_y = new_x, new_y
     if state == BONUS_ROUND2:
         sprite_x, sprite_y = new_x, new_y
+
+    if keys[pygame.K_SPACE]:
+        # check if enough time has passed since the last shot
+        if current_time - last_shot_time > shoot_delay:
+            if len(bullets) < max_bullets:
+                bullets.append(Bullets(sprite_x, sprite_y+20))  # Example starting position
+                last_shot_time = current_time  # Update the last shot time
 
     screen.blit(current_background, (0, 0))  # scaling main menu image
 
@@ -1187,6 +1215,10 @@ while run:
             complete3()
         if pause_button.draw(screen):
             pause3()
+        for bullet in bullets:
+            bullet.update()
+        for bullet in bullets:
+            bullet.draw(screen)
 
     elif state == PAUSE1:
         retry_button.draw(screen)
@@ -1323,7 +1355,5 @@ while run:
         score3_text = font.render(f"S C O R E : {score3}", True, (255, 255, 255))  # Render the score in white color
         screen.blit(score3_text, (1000, 75))  # output score top-left corner
 
-    elif state == SHOOT:
-        ammo_image = pygame.image.load('').convert_alpha()
 
     pygame.display.update()
