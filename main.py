@@ -798,6 +798,18 @@ shoot_delay = 250   # time in milliseconds to wait before allowing another bulle
 
 fire_ammo = False
 
+singular_bullet_image = pygame.image.load("singular_bullet.png").convert_alpha()
+singular_bullet_image = pygame.transform.scale(singular_bullet_image, (15, 50))  # scale to fit the grid
+ammo_position1 = (5 * TILESIZE, 1.1 * TILESIZE)
+ammo_position2 = (6 * TILESIZE, 1.1 * TILESIZE)
+ammo_position3 = (7 * TILESIZE, 1.1 * TILESIZE)
+ammo_position4 = (8 * TILESIZE, 1.1 * TILESIZE)
+ammo_position5 = (9 * TILESIZE, 1.1 * TILESIZE)
+ammo_tally = [ammo_position1, ammo_position2, ammo_position3, ammo_position4, ammo_position5]
+
+
+
+
 # HEALTH
 
 
@@ -985,6 +997,8 @@ while run:
                 if len(bullets) < max_bullets:
                     bullets.append(Bullets(sprite_x, sprite_y + 20))
                     last_shot_time = current_time  # Update the last shot time
+                    if ammo_tally:  # only remove if there's ammo left
+                        ammo_tally.pop()  # remove one bullet from the tally
 
     screen.blit(current_background, (0, 0))  # scaling main menu image
 
@@ -1195,13 +1209,6 @@ while run:
             pause2()
 
     elif state == LEVEL3:
-        singular_bullet_image = pygame.image.load("singular_bullet.png").convert_alpha()
-        singular_bullet_image = pygame.transform.scale(singular_bullet_image, (15, 50))  # scale to fit the grid
-        ammo_position1 = (5 * TILESIZE, 1.1 * TILESIZE)
-        ammo_position2 = (6 * TILESIZE, 1.1 * TILESIZE)
-        ammo_position3 = (7 * TILESIZE, 1.1 * TILESIZE)
-        ammo_position4 = (8 * TILESIZE, 1.1 * TILESIZE)
-        ammo_position5 = (9 * TILESIZE, 1.1 * TILESIZE)
         draw_grid()
         # loading sprite on grid
         display_sprite(sprite_x // TILESIZE, sprite_y // TILESIZE)
@@ -1227,16 +1234,12 @@ while run:
         if pause_button.draw(screen):
             pause3()
         if fire_ammo:  # once the bullets can be fired
-            screen.blit(singular_bullet_image, ammo_position1)
-            screen.blit(singular_bullet_image, ammo_position2)
-            screen.blit(singular_bullet_image, ammo_position3)
-            screen.blit(singular_bullet_image, ammo_position4)
-            screen.blit(singular_bullet_image, ammo_position5)
+            for position in ammo_tally:
+                screen.blit(singular_bullet_image, position)
             for bullet in bullets:
                 bullet.update()
             for bullet in bullets:
                 bullet.draw(screen)
-
 
     elif state == PAUSE1:
         retry_button.draw(screen)
