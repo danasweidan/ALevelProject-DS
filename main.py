@@ -776,8 +776,9 @@ def draw_moving_enemy():
     enemy_y = current_position[1] * TILESIZE
     screen.blit(enemy_image, (enemy_x, enemy_y))
 
+
 max_bullets = 5
-class Bullets():
+class Bullets:
     def __init__(self, x, y):
         self.image = pygame.image.load("bullet.png")
         self.rect = self.image.get_rect()
@@ -795,6 +796,7 @@ bullets = []
 last_shot_time = 0  # to track the last time a bullet was shot
 shoot_delay = 250   # time in milliseconds to wait before allowing another bullet
 
+fire_ammo = False
 
 # HEALTH
 
@@ -976,12 +978,13 @@ while run:
     if state == BONUS_ROUND2:
         sprite_x, sprite_y = new_x, new_y
 
-    if keys[pygame.K_SPACE]:
-        # check if enough time has passed since the last shot
-        if current_time - last_shot_time > shoot_delay:
-            if len(bullets) < max_bullets:
-                bullets.append(Bullets(sprite_x, sprite_y+20))  # Example starting position
-                last_shot_time = current_time  # Update the last shot time
+    if fire_ammo:
+        if keys[pygame.K_SPACE]:
+            # check if enough time has passed since the last shot
+            if current_time - last_shot_time > shoot_delay:
+                if len(bullets) < max_bullets:
+                    bullets.append(Bullets(sprite_x, sprite_y + 20))
+                    last_shot_time = current_time  # Update the last shot time
 
     screen.blit(current_background, (0, 0))  # scaling main menu image
 
@@ -1211,14 +1214,18 @@ while run:
         enemy_collision(sprite_x, sprite_y)
         if bullets_collision(sprite_x, sprite_y):
             draw_ammo = False
+            fire_ammo = True
         if trophy_collision3(sprite_x, sprite_y):
             complete3()
         if pause_button.draw(screen):
             pause3()
-        for bullet in bullets:
-            bullet.update()
-        for bullet in bullets:
-            bullet.draw(screen)
+        if fire_ammo:
+            for bullet in bullets:
+                bullet.update()
+            for bullet in bullets:
+                bullet.draw(screen)
+
+
 
     elif state == PAUSE1:
         retry_button.draw(screen)
