@@ -781,15 +781,30 @@ max_bullets = 5
 class Bullets:
     def __init__(self, x, y):
         self.image = pygame.image.load("bullet.png")
+        self.image = pygame.transform.scale(self.image, (20, 20))
+        self.x = x
+        self.y = y
         self.rect = self.image.get_rect()
         self.rect.center = [x, y]
+        self.spawn_time = pygame.time.get_ticks()
+        self.active = True
 
     def update(self):
-        self.rect.x += 5
+        if self.active:
+            self.rect.x += 5  # move bullet to the right
+            if pygame.time.get_ticks() - self.spawn_time >= 200:
+                self.active = False
 
     def draw(self, surface):
-        self.image = pygame.transform.scale(self.image, (20, 20))
-        surface.blit(self.image, self.rect)
+        if self.active:  # Only draw if bullet is active
+            surface.blit(self.image, self.rect)  # Draw bullet
+
+    def is_active(self):
+        return self.active
+
+
+    def get_position(self):  # gets pos of bullet
+        return (self.rect.x, self.rect.y)
 
 
 bullets = []
@@ -903,6 +918,8 @@ def draw_slider():
 drag1 = False
 drag2 = False
 
+
+
 # running the game loop
 run = True
 while run:
@@ -995,10 +1012,15 @@ while run:
             # check if enough time has passed since the last shot
             if current_time - last_shot_time > shoot_delay:
                 if len(bullets) < max_bullets:
-                    bullets.append(Bullets(sprite_x, sprite_y + 20))
+                    bullet = Bullets(sprite_x, sprite_y + 20)
+                    bullets.append(bullet)
                     last_shot_time = current_time  # Update the last shot time
                     if ammo_tally:  # only remove if there's ammo left
                         ammo_tally.pop()  # remove one bullet from the tally
+                    if not bullet.active:  # monitoring when the bullet is active
+                        bullets.remove(bullet)
+
+            pygame.display.flip()  # Update the display
 
     screen.blit(current_background, (0, 0))  # scaling main menu image
 
