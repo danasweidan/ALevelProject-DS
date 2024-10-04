@@ -824,8 +824,6 @@ ammo_position5 = (9 * TILESIZE, 1.1 * TILESIZE)
 ammo_tally = [ammo_position1, ammo_position2, ammo_position3, ammo_position4, ammo_position5]
 
 
-
-
 # HEALTH
 
 
@@ -834,17 +832,17 @@ current_health = 15
 health_bar_width = 400  # width of the health bar
 health_bar_height = 60  # height of the health bar
 
-
+white = (255, 255, 255)
 collided = False
 
 def draw_health_bar():
     health_percentage = current_health / max_health
     current_bar_width = int(health_percentage * health_bar_width)
     # drawing health bar
-    pygame.draw.rect(screen, (0, 0, 0), (0, 0, health_bar_width, health_bar_height), 2)
+    pygame.draw.rect(screen, white, (0, 0, health_bar_width, health_bar_height), 8)
     # filling in the health bar amount
     if current_bar_width > 0:
-        pygame.draw.rect(screen, GREEN, (0, 0, current_bar_width, health_bar_height))
+        pygame.draw.rect(screen, GREEN, (4, 4, current_bar_width - 10, health_bar_height - 10))
 
 # initialize the timer for health reduction
 
@@ -1234,7 +1232,7 @@ while run:
             pause2()
 
     elif state == LEVEL3:
-        draw_grid()
+        #draw_grid()
         # loading sprite on grid
         display_sprite(sprite_x // TILESIZE, sprite_y // TILESIZE)
         draw_score3(score3)
