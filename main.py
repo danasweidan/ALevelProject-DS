@@ -24,6 +24,7 @@ sound_buttons = pygame.mixer.Sound("mixkit-retro-arcade-casino-notification-211.
 sound_bonus = pygame.mixer.Sound("mixkit-extra-bonus-in-a-video-game-2045.wav")
 sound_countdown = pygame.mixer.Sound("mixkit-start-countdown-927.wav")
 sound_shoot = pygame.mixer.Sound("mixkit-short-laser-gun-shot-1670.wav")
+sound_kill = pygame.mixer.Sound("mixkit-unlock-new-item-game-notification-254.wav")
 
 # loading title of game
 title_image = pygame.image.load('pixelpaths.png').convert_alpha()
@@ -883,6 +884,7 @@ sound_buttons.set_volume(volume2)
 sound_bonus.set_volume(volume2)
 sound_countdown.set_volume(volume2)
 sound_shoot.set_volume(volume2)
+sound_kill.set_volume(volume2)
 
 # sliders settings
 slider_x = 660  # x pox of slider
@@ -971,6 +973,7 @@ while run:
                 sound_bonus.set_volume(volume2)
                 sound_countdown.set_volume(volume2)
                 sound_shoot.set_volume(volume2)
+                sound_kill.set_volume(volume2)
         if drag1:
             drag2 = False
 
@@ -1020,6 +1023,11 @@ while run:
                         ammo_tally.pop()  # remove one bullet from the tally
                     if not bullet.active:  # monitoring when the bullet is active
                         bullets.remove(bullet)
+                    if len(bullets) == 3:
+                        enemy_draw = False
+                        sound_kill.play()
+                        score3 += 50
+
 
             pygame.display.flip()  # Update the display
 
