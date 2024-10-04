@@ -23,6 +23,7 @@ sound_completion = pygame.mixer.Sound("mixkit-completion-of-a-level-2063.wav")
 sound_buttons = pygame.mixer.Sound("mixkit-retro-arcade-casino-notification-211.wav")
 sound_bonus = pygame.mixer.Sound("mixkit-extra-bonus-in-a-video-game-2045.wav")
 sound_countdown = pygame.mixer.Sound("mixkit-start-countdown-927.wav")
+sound_shoot = pygame.mixer.Sound("mixkit-short-laser-gun-shot-1670.wav")
 
 # loading title of game
 title_image = pygame.image.load('pixelpaths.png').convert_alpha()
@@ -883,6 +884,7 @@ sound_completion.set_volume(volume2)
 sound_buttons.set_volume(volume2)
 sound_bonus.set_volume(volume2)
 sound_countdown.set_volume(volume2)
+sound_shoot.set_volume(volume2)
 
 # sliders settings
 slider_x = 660  # x pox of slider
@@ -917,7 +919,6 @@ def draw_slider():
 
 drag1 = False
 drag2 = False
-
 
 
 # running the game loop
@@ -971,6 +972,7 @@ while run:
                 sound_buttons.set_volume(volume2)
                 sound_bonus.set_volume(volume2)
                 sound_countdown.set_volume(volume2)
+                sound_shoot.set_volume(volume2)
         if drag1:
             drag2 = False
 
@@ -1014,6 +1016,7 @@ while run:
                 if len(bullets) < max_bullets:
                     bullet = Bullets(sprite_x, sprite_y + 20)
                     bullets.append(bullet)
+                    sound_shoot.play()
                     last_shot_time = current_time  # Update the last shot time
                     if ammo_tally:  # only remove if there's ammo left
                         ammo_tally.pop()  # remove one bullet from the tally
