@@ -25,6 +25,7 @@ sound_bonus = pygame.mixer.Sound("mixkit-extra-bonus-in-a-video-game-2045.wav")
 sound_countdown = pygame.mixer.Sound("mixkit-start-countdown-927.wav")
 sound_shoot = pygame.mixer.Sound("mixkit-short-laser-gun-shot-1670.wav")
 sound_kill = pygame.mixer.Sound("mixkit-unlock-new-item-game-notification-254.wav")
+sound_ammo = pygame.mixer.Sound("mixkit-handgun-click-1660.mp3")
 
 # loading title of game
 title_image = pygame.image.load('pixelpaths.png').convert_alpha()
@@ -885,6 +886,7 @@ sound_bonus.set_volume(volume2)
 sound_countdown.set_volume(volume2)
 sound_shoot.set_volume(volume2)
 sound_kill.set_volume(volume2)
+sound_ammo.set_volume(volume2)
 
 # sliders settings
 slider_x = 660  # x pox of slider
@@ -974,6 +976,7 @@ while run:
                 sound_countdown.set_volume(volume2)
                 sound_shoot.set_volume(volume2)
                 sound_kill.set_volume(volume2)
+                sound_ammo.set_volume(volume2)
         if drag1:
             drag2 = False
 
@@ -1027,7 +1030,6 @@ while run:
                         enemy_draw = False
                         sound_kill.play()
                         score3 += 50
-
 
             pygame.display.flip()  # Update the display
 
@@ -1258,6 +1260,7 @@ while run:
         draw_health_bar()
         enemy_collision(sprite_x, sprite_y)
         if bullets_collision(sprite_x, sprite_y):  # once the sprite collides with the ammo on screen
+            sound_ammo.play()
             draw_ammo = False
             fire_ammo = True
         if trophy_collision3(sprite_x, sprite_y):
