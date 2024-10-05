@@ -1242,7 +1242,6 @@ while run:
             pause2()
 
     elif state == LEVEL3:
-        #draw_grid()
         # loading sprite on grid
         display_sprite(sprite_x // TILESIZE, sprite_y // TILESIZE)
         draw_score3(score3)
