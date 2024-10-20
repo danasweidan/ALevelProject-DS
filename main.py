@@ -203,6 +203,7 @@ PLAY = "play"
 CONTROLS = "controls"
 CUSTOM = "custom"
 LEVEL1 = "level1"
+LEVEL11 = "level11"
 LEVEL2 = "level2"
 LEVEL3 = "level3"
 PAUSE1 = "pause1"
@@ -266,6 +267,16 @@ def custom():
 def level1():
     global main, current_background, state, sprite_x, sprite_y, initial_sprite_x, initial_sprite_y
     state = LEVEL1
+    pygame.display.set_caption("Level 1")
+    custom_background = pygame.image.load('black.png').convert_alpha()  # loading a black image for the background
+    current_background = custom_background  # setting the new current background
+    screen.blit(current_background, (0, 0))
+    sprite_x, sprite_y = initial_sprite_x, initial_sprite_y  # Reset the sprite's position
+    pygame.display.update()
+
+def level11():
+    global main, current_background, state, sprite_x, sprite_y, initial_sprite_x, initial_sprite_y
+    state = LEVEL11
     pygame.display.set_caption("Level 1")
     custom_background = pygame.image.load('black.png').convert_alpha()  # loading a black image for the background
     current_background = custom_background  # setting the new current background
@@ -521,6 +532,11 @@ level1_coins = [(7, 10), (7, 9), (7, 8), (1, 3), (1, 4), (2, 3), (2, 4), (5, 3),
                 (17, 3), (17, 4), (17, 5), (19, 3), (19, 4), (19, 5), (20, 3), (20, 4), (20, 5), (15, 10), (16, 10),
                 (17, 10), (18, 10), (1, 6), (1, 7), (1, 8),(15, 10), (15, 10), (10, 3), (11, 3), (12, 3), (13, 3)
                 ]
+level11_coins = [(7, 10), (7, 9), (7, 8), (1, 3), (1, 4), (2, 3), (2, 4), (5, 3), (5, 4), (5, 5), (5, 6), (6, 3), (7, 3),
+                (7, 4), (7, 5), (7, 6), (10, 4), (11, 4), (12, 4), (13, 4), (9, 10), (9, 9), (9, 8),
+                (17, 3), (17, 4), (17, 5), (19, 3), (19, 4), (19, 5), (20, 3), (20, 4), (20, 5), (15, 10), (16, 10),
+                (17, 10), (18, 10), (1, 6), (1, 7), (1, 8),(15, 10), (15, 10), (10, 3), (11, 3), (12, 3), (13, 3)
+                ]
 level2_coins = [(1, 9), (1, 8), (1, 7), (1, 6), (1, 4), (1, 3), (2, 3), (8, 3), (8, 4), (8, 5), (8, 6), (8, 10),
                 (9, 10), (10, 10), (11, 10), (15, 8), (15, 7), (20, 10), (20, 9), (20, 8), (19, 10), (19, 8), (18, 10),
                 (18, 9), (18, 8), (20, 3), (19, 3), (19, 4), (19, 5), (20, 5), (12, 3), (12, 4), (12, 5), (12, 6),
@@ -573,6 +589,20 @@ def coin_collision1(sprite_x, sprite_y):
     if sprite_pos in level1_coins:
         sound_coins.play()
         level1_coins.remove(sprite_pos)
+        score1 += 50  # +50 points to the score
+
+def draw_coins_11():
+    for coin_pos in level11_coins:
+        coin_x = coin_pos[0] * TILESIZE + 15
+        coin_y = coin_pos[1] * TILESIZE + 15
+        screen.blit(coin_image, (coin_x, coin_y))
+# coin collisions
+def coin_collision11(sprite_x, sprite_y):
+    global score1
+    sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
+    if sprite_pos in level11_coins:
+        sound_coins.play()
+        level11_coins.remove(sprite_pos)
         score1 += 50  # +50 points to the score
 # level2
 def draw_coins_2():
@@ -998,6 +1028,9 @@ while run:
     if state == LEVEL1:
         if (new_x // TILESIZE, new_y // TILESIZE) not in level1_walls:
             sprite_x, sprite_y = new_x, new_y
+    if state == LEVEL11:
+        if (new_x // TILESIZE, new_y // TILESIZE) not in level1_walls:
+            sprite_x, sprite_y = new_x, new_y
 
     if state == LEVEL2:
         if (new_x // TILESIZE, new_y // TILESIZE) not in level2_walls:
@@ -1221,6 +1254,22 @@ while run:
         coin_collision1(sprite_x, sprite_y)
         draw_trophy1()
         if trophy_collision1(sprite_x, sprite_y):
+            if level1_coins == []:
+                draw_coins_11()
+                coin_collision11(sprite_x, sprite_y)
+            complete1()
+        if pause_button.draw(screen):
+            pause1()
+
+    elif state == LEVEL11:
+        # loading sprite on grid
+        display_sprite(sprite_x // TILESIZE, sprite_y // TILESIZE)
+        draw_walls_1()
+        draw_score1(score1)
+        draw_coins_11()
+        coin_collision11(sprite_x, sprite_y)
+        draw_trophy1()
+        if trophy_collision1(sprite_x, sprite_y):
             complete1()
         if pause_button.draw(screen):
             pause1()
@@ -1329,7 +1378,9 @@ while run:
         if resume_button.draw(screen):
             sound_buttons.play()
             level2()
-        retry_button.draw(screen)
+        if retry_button.draw(screen):
+            score1 = 0
+            level11()
         if exit_button.draw(screen):
             sound_buttons.play()
             main = pygame.image.load('mainmenu.png')  # loading the main menu background
