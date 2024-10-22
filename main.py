@@ -196,6 +196,11 @@ star2_image = pygame.image.load('star.png').convert_alpha()
 # constructing star button
 star2_button = button.Button(470, 270, star2_image, 0.7)
 
+# loading game over button
+game_over_image = pygame.image.load('game_over.png').convert_alpha()
+# constructing game over button
+game_over_button = button.Button(640, 100, game_over_image, 0.55)
+
 
 # creating the states
 MAIN_MENU = "main_menu"
@@ -357,6 +362,16 @@ def complete3():
     current_background = custom_background  # setting the new current background
     screen.blit(current_background, (0, 0))
     pygame.display.update()
+
+def game_over():
+    global main, current_background, state
+    state = GAME_OVER
+    pygame.display.set_caption("Game Over")
+    custom_background = pygame.image.load('black.png').convert_alpha()  # loading a black image for the background
+    current_background = custom_background  # setting the new current background
+    screen.blit(current_background, (0, 0))
+    pygame.display.update()
+
 
 
 # function for bonus round
@@ -797,7 +812,7 @@ enemy_position_2 = (15, 9)
 def draw_moving_enemy():
     global last_switch_time, sprite_at_first_position
     current_time = pygame.time.get_ticks()
-    if current_time - last_switch_time >= move_time: # checks if it's been 1.5s
+    if current_time - last_switch_time >= move_time:  # checks if it's been 1.5s
         sprite_at_first_position = not sprite_at_first_position  # alternates pos
         last_switch_time = current_time
     if sprite_at_first_position:
@@ -884,15 +899,17 @@ collision_cooldown = 2000  # 5 seconds in milliseconds
 
 # function to check for collision with the enemy
 def enemy_collision(sprite_x, sprite_y):
-    global current_health, collided, last_collision_time, collision_cooldown
+    global current_health, collided, last_collision_time, collision_cooldown, state
     sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
     current_time = pygame.time.get_ticks()
     if sprite_pos == (13, 9):
         if current_time - last_collision_time > collision_cooldown:
             if not collided:
                 current_health -= 5
-                if current_health < 0:  # prevent health from going below 0
+                if current_health < 5:  # prevent health from going below 0
                     current_health = 0
+                    fade_out(screen, screen_width, screen_height, fade_speed=2)
+                    state = GAME_OVER
             last_collision_time = current_time
             collided = True
         else:
@@ -951,6 +968,18 @@ def draw_slider():
 
 drag1 = False
 drag2 = False
+
+gameOver = False
+# fade out effect function
+def fade_out(screen, screen_width, screen_height, fade_speed):
+    fade_surface = pygame.Surface((screen_width, screen_height))
+    fade_surface.fill((0, 0, 0))
+
+    for alpha in range(0, 255, fade_speed):
+        fade_surface.set_alpha(alpha)
+        screen.blit(fade_surface, (0, 0))
+        pygame.display.update()  # Update the display
+        pygame.time.delay(30)  # Add delay for smooth fade animation
 
 
 # running the game loop
@@ -1459,6 +1488,23 @@ while run:
         screen.blit(time, (10, 75))  # output score top-left corner
         score3_text = font.render(f"S C O R E : {score3}", True, (255, 255, 255))  # Render the score in white color
         screen.blit(score3_text, (1000, 75))  # output score top-left corner
+
+    elif state == GAME_OVER:
+        font = pygame.font.SysFont('Emulogic', 50, bold=True)
+        score_text3 = font.render(f"S C O R E : {score3}", True, (255, 255, 255))  # Render the score in white color
+        screen.blit(score_text3, (500, 300))  # output score in centre
+        star1_button.draw(screen)
+        star2_button.draw(screen)
+        game_over_button.draw(screen)
+        retry_button.draw(screen)
+        if exit_button.draw(screen):
+            sound_buttons.play()
+            main = pygame.image.load('mainmenu.png')  # loading the main menu background
+            scaled_main = pygame.transform.scale(main, (1280, 720))  # scaling down the image to fit the screen
+            current_background = scaled_main
+            state = MAIN_MENU
+            sprite_x, sprite_y = initial_sprite_x, initial_sprite_y  # Reset sprite position
+            pygame.display.set_caption("Main Menu")
 
 
     pygame.display.update()
