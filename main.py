@@ -26,6 +26,8 @@ sound_countdown = pygame.mixer.Sound("mixkit-start-countdown-927.wav")
 sound_shoot = pygame.mixer.Sound("mixkit-short-laser-gun-shot-1670.wav")
 sound_kill = pygame.mixer.Sound("mixkit-unlock-new-item-game-notification-254.wav")
 sound_ammo = pygame.mixer.Sound("mixkit-handgun-click-1660.mp3")
+sound_gameOver = pygame.mixer.Sound("mixkit-retro-game-over-1947.wav")
+sound_hit = pygame.mixer.Sound("mixkit-arcade-mechanical-bling-210.wav")
 
 # loading title of game
 title_image = pygame.image.load('pixelpaths.png').convert_alpha()
@@ -211,6 +213,7 @@ LEVEL1 = "level1"
 LEVEL11 = "level11"
 LEVEL2 = "level2"
 LEVEL3 = "level3"
+LEVEL33 = "level33"
 PAUSE1 = "pause1"
 PAUSE2 = "pause2"
 PAUSE3 = "pause3"
@@ -311,6 +314,16 @@ def level3():
     sprite_x, sprite_y = initial_sprite_x, initial_sprite_y  # Reset the sprite's position
     pygame.display.update()
 
+def level33():
+    global main, current_background, state, sprite_x, sprite_y, initial_sprite_x, initial_sprite_y
+    state = LEVEL33
+    pygame.display.set_caption("Level 3")
+    custom_background = pygame.image.load('black.png').convert_alpha()  # loading a black image for the background
+    current_background = custom_background  # setting the new current background
+    screen.blit(current_background, (0, 0))
+    sprite_x, sprite_y = initial_sprite_x, initial_sprite_y  # Reset the sprite's position
+    pygame.display.update()
+
 # pause function
 def pause1():
     global main, current_background, state, scaled_main
@@ -371,7 +384,6 @@ def game_over():
     current_background = custom_background  # setting the new current background
     screen.blit(current_background, (0, 0))
     pygame.display.update()
-
 
 
 # function for bonus round
@@ -590,6 +602,13 @@ level3_coins = [(2, 6), (2, 7), (3, 9), (3, 8), (2, 9), (2, 10), (1, 3), (4, 8),
                 (16, 4), (17, 3), (17, 4), (4, 5)
                 ]
 
+level33_coins = [(2, 6), (2, 7), (3, 9), (3, 8), (2, 9), (2, 10), (1, 3), (4, 8), (4, 7), (3, 5), (6, 5), (6, 4),
+                (6, 3), (7, 5), (8, 5), (8, 4), (8, 3), (9, 7), (9, 6), (10, 6), (8, 7), (8, 8), (8, 9), (10, 5),(11, 5)
+                , (19, 10), (20, 10), (20, 9), (20, 8), (20, 7), (20, 6), (20, 5), (20, 4), (20, 3), (19, 8), (19, 4),
+                (19, 6), (18, 6), (18, 5), (18, 7), (10, 3), (11, 3), (12, 3), (13, 3), (14, 3), (15, 3), (15, 4),
+                (16, 4), (17, 3), (17, 4), (4, 5)
+                ]
+
 # level1
 # function for placing the coins
 def draw_coins_1():
@@ -673,6 +692,20 @@ def coin_collision3(sprite_x, sprite_y):
     if sprite_pos in level3_coins:
         sound_coins.play()
         level3_coins.remove(sprite_pos)
+        score3 += 50  # +50 points to the score
+
+def draw_coins_33():
+    for coin_pos in level33_coins:
+        coin_x = coin_pos[0] * TILESIZE + 15
+        coin_y = coin_pos[1] * TILESIZE + 15
+        screen.blit(coin_image, (coin_x, coin_y))
+# coin collisions
+def coin_collision33(sprite_x, sprite_y):
+    global score3
+    sprite_pos = (sprite_x // TILESIZE, sprite_y // TILESIZE)
+    if sprite_pos in level33_coins:
+        sound_coins.play()
+        level33_coins.remove(sprite_pos)
         score3 += 50  # +50 points to the score
 
 
@@ -850,7 +883,6 @@ class Bullets:
     def is_active(self):
         return self.active
 
-
     def get_position(self):  # gets pos of bullet
         return (self.rect.x, self.rect.y)
 
@@ -905,10 +937,12 @@ def enemy_collision(sprite_x, sprite_y):
     if sprite_pos == (13, 9):
         if current_time - last_collision_time > collision_cooldown:
             if not collided:
+                sound_hit.play()
                 current_health -= 5
                 if current_health < 5:  # prevent health from going below 0
                     current_health = 0
-                    fade_out(screen, screen_width, screen_height, fade_speed=2)
+                    sound_gameOver.play()
+                    fade_out(screen, screen_width, screen_height, fade_speed=5)
                     state = GAME_OVER
             last_collision_time = current_time
             collided = True
@@ -934,6 +968,8 @@ sound_countdown.set_volume(volume2)
 sound_shoot.set_volume(volume2)
 sound_kill.set_volume(volume2)
 sound_ammo.set_volume(volume2)
+sound_gameOver.set_volume(volume2)
+sound_hit.set_volume(volume2)
 
 # sliders settings
 slider_x = 660  # x pox of slider
@@ -1036,6 +1072,8 @@ while run:
                 sound_shoot.set_volume(volume2)
                 sound_kill.set_volume(volume2)
                 sound_ammo.set_volume(volume2)
+                sound_gameOver.set_volume(volume2)
+                sound_hit.set_volume(volume2)
         if drag1:
             drag2 = False
 
@@ -1066,6 +1104,10 @@ while run:
             sprite_x, sprite_y = new_x, new_y
 
     if state == LEVEL3:
+        if ((new_x // TILESIZE, new_y // TILESIZE) not in level3_walls and
+                (new_x // TILESIZE, new_y // TILESIZE) != enemy_position_1 and enemy_position_2):
+            sprite_x, sprite_y = new_x, new_y
+    if state == LEVEL33:
         if ((new_x // TILESIZE, new_y // TILESIZE) not in level3_walls and
                 (new_x // TILESIZE, new_y // TILESIZE) != enemy_position_1 and enemy_position_2):
             sprite_x, sprite_y = new_x, new_y
@@ -1352,6 +1394,42 @@ while run:
             for bullet in bullets:
                 bullet.draw(screen)
 
+    elif state == LEVEL33:
+        portal_draw = True
+        # loading sprite on grid
+        display_sprite(sprite_x // TILESIZE, sprite_y // TILESIZE)
+        draw_score3(score3)
+        draw_walls_3()
+        draw_coins_33()
+        coin_collision33(sprite_x, sprite_y)
+        draw_trophy3()
+        draw_portal2()
+        if portal_collision2(sprite_x, sprite_y):
+            sound_countdown.play()
+            bonus_round2()
+        draw_bullets()
+        if enemy_draw:
+            draw_moving_enemy()  # drawing enemy
+        max_health = 15
+        current_health = 15
+        draw_health_bar()
+        enemy_collision(sprite_x, sprite_y)
+        if bullets_collision(sprite_x, sprite_y):  # once the sprite collides with the ammo on screen
+            sound_ammo.play()
+            draw_ammo = False
+            fire_ammo = True
+        if trophy_collision3(sprite_x, sprite_y):
+            complete3()
+        if pause_button.draw(screen):
+            pause3()
+        if fire_ammo:  # once the bullets can be fired
+            for position in ammo_tally:
+                screen.blit(singular_bullet_image, position)
+            for bullet in bullets:
+                bullet.update()
+            for bullet in bullets:
+                bullet.draw(screen)
+
     elif state == PAUSE1:
         retry_button.draw(screen)
         if exit_button.draw(screen):
@@ -1496,7 +1574,9 @@ while run:
         star1_button.draw(screen)
         star2_button.draw(screen)
         game_over_button.draw(screen)
-        retry_button.draw(screen)
+        if retry_button.draw(screen):
+            score3 = 0
+            level33()
         if exit_button.draw(screen):
             sound_buttons.play()
             main = pygame.image.load('mainmenu.png')  # loading the main menu background
