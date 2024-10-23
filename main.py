@@ -27,7 +27,7 @@ sound_shoot = pygame.mixer.Sound("mixkit-short-laser-gun-shot-1670.wav")
 sound_kill = pygame.mixer.Sound("mixkit-unlock-new-item-game-notification-254.wav")
 sound_ammo = pygame.mixer.Sound("mixkit-handgun-click-1660.mp3")
 sound_gameOver = pygame.mixer.Sound("mixkit-retro-game-over-1947.wav")
-sound_hit = pygame.mixer.Sound("mixkit-arcade-mechanical-bling-210.wav")
+sound_hit = pygame.mixer.Sound("mixkit-arcade-mechanical-bling-210 (1).wav")
 
 # loading title of game
 title_image = pygame.image.load('pixelpaths.png').convert_alpha()
