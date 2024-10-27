@@ -191,7 +191,7 @@ retry_button = button.Button(380, 500, retry_image, 0.7)
 # loading star button
 star1_image = pygame.image.load('star.png').convert_alpha()
 # constructing star button
-star1_button = button.Button(800, 270, star1_image, 0.7)
+star1_button = button.Button(802, 270, star1_image, 0.7)
 
 # loading star button
 star2_image = pygame.image.load('star.png').convert_alpha()
